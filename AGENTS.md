@@ -115,7 +115,10 @@ Codex는 Codex CLI를 지칭합니다.
 **특히 조사 폭과 구체성을 위해 다음 항목을 빠뜨리지 않는다.**
 
 - Coverage Contract
+- Source Fallback Rule
+- Exploration Expansion Rule
 - Claim-to-Evidence Map
+- 고영향 Claim의 독립 근거 강도
 - Evidence Notes 분리 규칙
 - 완료 체크리스트와 모드별 필수 증빙
 
