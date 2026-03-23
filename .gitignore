@@ -382,3 +382,4 @@ sketch
 # Codex Sessions
 scripts/*-session.sh
 store/
+browser-automation/

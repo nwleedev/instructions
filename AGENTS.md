@@ -7,7 +7,6 @@ Codex는 Codex CLI를 지칭합니다.
 ## 인터넷 연결
 
 - 인터넷 연결 확인 요청을 받으면 다음과 같은 명령어 등으로 인터넷 연결 여부를 확인해야 함.
-
   - `ping -c 3 1.1.1.1`
   - `ping -c 3 8.8.8.8`
 
@@ -50,14 +49,12 @@ Codex는 Codex CLI를 지칭합니다.
 ## 세션
 
 - 사용자는 `codex resume <session_id>`로 Codex를 실행할 때 해당 세션 ID에 대해서 작업을 시작하거나 이어나갈 수 있음.
-
   - 사용자는 `CODEX_SESSION_ID=<session_id>` 환경변수를 같이 주입.
   - 세션 ID는 환경변수 CODEX_SESSION_ID로 파악.
   - `codex resume <session_id_1>`와 `CODEX_SESSION_ID=<session_id_2>`에서, session_id_1과 session_id_2는 서로 같다고 가정할 것.
 
 - 인터넷 연결 요청에 대해서는 세션 ID를 확인하지 않음.(세션 ID를 확보하기 위한 작업)
 - 만약 세션 아이디가 없다면 사용자에게 세션을 임시로 세팅할지를 질문
-
   - 세팅한다면 현재 작업에 대해서 임의로 세션 아이디를 세팅하고 진행
   - 세팅하지 않는다면 무시하고 진행.
 
@@ -105,6 +102,24 @@ Codex는 Codex CLI를 지칭합니다.
 **금지 패턴에 해당하는 구조를 테스트 코드 작성 및 수정, 그리고 테스트 실행에 반영하지 않는다.**
 
 - `instructions/frontend/TEST_ANTI_PATTERNS.md`
+
+## 조사 / 검색 하네스
+
+**프로젝트 종류와 무관하게 조사 작업, 비교 작업, 구현 전 사전 검토를 시작할 때는 다음 문서를 순서대로 전부 읽는다.**
+
+- `instructions/research/INDEX.md`
+- `instructions/research/ARCHITECTURE.md`
+- `instructions/research/ANTI_PATTERNS.md`
+- `instructions/research/VALIDATION.md`
+
+**특히 조사 폭과 구체성을 위해 다음 항목을 빠뜨리지 않는다.**
+
+- Coverage Contract
+- Claim-to-Evidence Map
+- Evidence Notes 분리 규칙
+- 완료 체크리스트와 모드별 필수 증빙
+
+**개발 작업이 최종 목적이더라도, 먼저 조사 단계라면 research 문서를 따르고 구현 단계에서 개발 관련 하네스 문서를 적용한다. Research 문서는 서비스 조사뿐 아니라 문서, 코드, 의존성, 운영 이슈 조사에도 적용한다.**
 
 ## 주석
 
