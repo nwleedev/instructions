@@ -25,12 +25,14 @@ Codex는 Codex CLI를 지칭합니다.
 - 모든 작업에 대해서 신뢰도 높은 있는 출처 명시
 - PC 루트 위치에 접근 및 "/tmp" 폴더를 사용하는 대신 `instructions/SESSIONS.md` 파일을 참고
 - 작업 중 모호한 사항을 발견할 때에는 사용자에게 선택지를 제시하고 대기
+- 단, 단순 구현 세부이거나 실질적인 선택지가 하나뿐인 경우에는 보수적으로 진행할 수 있다.
 - 코드 중복 대응: 여러 개의 코드가 중복된 기능을 제공하는 상황이 발생하는지 체크하고 해당 코드를 별도의 모듈로 분리하거나 일반화하는 방법을 조사하고 작업에 반영.
 
 ### 사용자 확인이 필요한 경우의 선택지 제공
 
 - 작업 중 모호한 사항을 발견할 때마다 사용자에게 선택지를 제시하고 대기. 모호한 사항을 여러 개 발견했을 경우 각 사항에 대해서 전부 선택지를 제시할 것.
 - 질문에는 선택지를 포함. 선택지를 단순히 나열하는 대신 선택지에 대해서 상세 정보, 장단점, 잠재적인 문제점을 조사해서 제시.
+- 단순 구현 세부이거나 실질적인 선택지가 하나뿐인 경우에는 질문 없이 진행할 수 있다.
 - 선택지를 제시해야 하는 상황의 예시는 다음과 같음. **물론 예시 외에도 다양한 상황에서 모호한 상황이 발생할 수 있음을 염두한다.**
   - 성공 조건, 완료 기준이 없음
   - 입출력 포맷, 환경, 제약을 알 수 없음.
@@ -61,6 +63,10 @@ Codex는 Codex CLI를 지칭합니다.
 - 사용자가 프롬프트를 Codex CLI에 입력하여, Codex CLI가 작업을 시작할 때, 그리고 끝낼 때마다 TICKETS.md(+ tickets 폴더), PROGRESS.md, DECISIONS.md(+ decisions 폴더), RESEARCH.md에 내용을 적절한 위치에 기록한다.
   - 작업을 시작할 때에도 세션 파일을 기록하는 이유는 작업 도중 컨텍스트 압축이 발생했을 때 작업 및 대화 맥락과 흐름을 유지하기 위함.
   - "만약 갑작스럽게 컨텍스트 압축(compaction)이 발생한다면, 우리가 작업 맥락과 대화 맥락을 유지하기 위해서는 어떤 파일에 어떤 내용을 기록해야 하는가"에 대해서 조사하고 세션 기록에 반영한다.
+- `PLANS.md`는 작업 시작 가능 여부를 판정하는 기준 문서로 취급한다.
+  - `PLANS.md`를 읽고 작업 완료에 필요한 정보가 비어 있거나 모호하면, 어떤 정보가 추가로 필요한지 사용자에게 제시한다.
+  - 사용자가 정보를 전달하면 Codex는 기존 `PLANS.md`에 **추가하는 방식으로만** 반영한다.
+  - `PLANS.md`의 기존 내용은 변경하거나 삭제하지 않는다.
 
 **각 세션 파일이 어떤 역할을 하는지에 대해서는 `instructions/SESSIONS.md` 파일을 참고한다.**
 
@@ -102,6 +108,27 @@ Codex는 Codex CLI를 지칭합니다.
 **금지 패턴에 해당하는 구조를 테스트 코드 작성 및 수정, 그리고 테스트 실행에 반영하지 않는다.**
 
 - `instructions/frontend/TEST_ANTI_PATTERNS.md`
+
+## 자료 조사 하네스
+
+**자료 조사 하네스에 대한 상세 지침은 다음과 같은 파일을 참고한다.**
+
+- **`instructions/research/INDEX.md`**
+- **`instructions/research/ARCHITECTURE.md`**
+
+**금지 패턴과 동일한 구조를 조사 수행 및 조사 결과 문서화에 반영하지 않는다.**
+
+- `instructions/research/ANTI_PATTERNS.md`
+
+**자료 조사 결과의 완료 기준과 검증 기준은 다음 파일을 참고한다.**
+
+- **`instructions/research/VALIDATION.md`**
+
+**조사 계획과 조사 기록 템플릿은 다음 파일을 참고한다.**
+
+- `instructions/research/templates/PLANS-RESEARCH-TEMPLATE.md`
+- `instructions/research/templates/RESEARCH-ENTRY-TEMPLATE.md`
+- `instructions/research/templates/CLAIM-MAP-TEMPLATE.md`
 
 ## 주석
 
