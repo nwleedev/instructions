@@ -103,27 +103,6 @@ Codex는 Codex CLI를 지칭합니다.
 
 - `instructions/frontend/TEST_ANTI_PATTERNS.md`
 
-## 조사 / 검색 하네스
-
-**프로젝트 종류와 무관하게 조사 작업, 비교 작업, 구현 전 사전 검토를 시작할 때는 다음 문서를 순서대로 전부 읽는다.**
-
-- `instructions/research/INDEX.md`
-- `instructions/research/ARCHITECTURE.md`
-- `instructions/research/ANTI_PATTERNS.md`
-- `instructions/research/VALIDATION.md`
-
-**특히 조사 폭과 구체성을 위해 다음 항목을 빠뜨리지 않는다.**
-
-- Coverage Contract
-- Source Fallback Rule
-- Exploration Expansion Rule
-- Claim-to-Evidence Map
-- 고영향 Claim의 독립 근거 강도
-- Evidence Notes 분리 규칙
-- 완료 체크리스트와 모드별 필수 증빙
-
-**개발 작업이 최종 목적이더라도, 먼저 조사 단계라면 research 문서를 따르고 구현 단계에서 개발 관련 하네스 문서를 적용한다. Research 문서는 서비스 조사뿐 아니라 문서, 코드, 의존성, 운영 이슈 조사에도 적용한다.**
-
 ## 주석
 
 - 코드 추가 또는 수정 시 처음 보는 사람이 코드의 동작과 설계 의도를 이해할 수 있도록 필요한 주석을 유지한다.
