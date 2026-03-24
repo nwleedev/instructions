@@ -6,8 +6,13 @@ Codex는 Codex CLI를 지칭합니다.
 
 ## 부트스트랩 규칙
 
-- **모든 작업을 시작할 때마다 먼저 이 파일을 읽고, 반드시 `instructions/INDEX.md` 파일을 읽는다.** `instructions/INDEX.md`는 **모든 작업에 공통 적용되는 필수 규칙 진입점**이다.
-- `AGENTS.md`의 목적은 모든 공통 규칙을 직접 반복하는 것이 아니라, 공통 규칙과 작업에 필요한 규칙을 파악하고 준수하도록 하는 **확실한 진입점**을 유지하는 것이다.
+모든 작업을 시작할 때마다 다음 파일을 항상 읽고 내용을 파악한다. 해당 파일들은 항상 활성인 공통 규칙 집합이다.
+
+- `instructions/INDEX.md`
+- `instructions/SESSIONS.md`
+- `instructions/RESEARCH.md`
+- `instructions/FAILURE.md`
+- `instructions/COMMENTS.md`
 
 ## 공통 규칙
 
@@ -17,7 +22,9 @@ Codex는 Codex CLI를 지칭합니다.
 
 Codex에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 대화 맥락 및 흐름의 유지를 하기 위해 **세션**이라는 개념을 사용한다.
 
-**세션의 정의가 무엇인지, 각 세션 파일이 어떤 역할을 하는지에 대해서는 `instructions/SESSIONS.md` 파일을 참고한다.**
+**세션의 정의가 무엇인지, 각 세션 파일이 어떤 역할을 하는지에 대해서는 `instructions/SESSIONS.md` 파일을 반드시 참고한다.**
+
+작업을 시작할 때 그리고 끝날 때 해당 파일에 있는 규칙대로 세션을 기록한다.
 
 ## 실패 대응 원칙
 
