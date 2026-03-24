@@ -4,19 +4,9 @@
 
 Codex는 Codex CLI를 지칭합니다.
 
-## 부트스트랩 규칙
-
-모든 작업을 시작할 때마다 다음 파일을 항상 읽고 내용을 파악한다. 해당 파일들은 항상 활성인 공통 규칙 집합이다.
-
-- `instructions/INDEX.md`
-- `instructions/SESSIONS.md`
-- `instructions/RESEARCH.md`
-- `instructions/FAILURE.md`
-- `instructions/COMMENTS.md`
-
-## 공통 규칙
-
 **모든 작업에 대해서 공통적으로 적용해야 하는 규칙에 대해서는 `instructions/INDEX.md` 파일을 반드시 따른다.**
+
+Codex를 처음 실행할 때 & 컨텍스트가 압축되었을 때에도 AGENTS.md, `instructions/INDEX.md` 파일을 **반드시** 읽고 어떻게 작업해야 하는지 파악한다.
 
 ## 세션
 
