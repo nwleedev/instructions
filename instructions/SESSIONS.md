@@ -251,3 +251,15 @@
 - PC 루트에 접근하는 대신 `./store/<session_id>/temps` 폴더에 기록한다.
   - "/tmp" 위치도 사용하지 않음.
   - Playwright MCP에서 발생하는 파일도 PC 루트 대신 `./store/<session_id>/temps` 위치여야 한다.
+
+- 세션 단위 재사용 캐시와 임시 산출물 전용 폴더이다. 다음을 `temps`에 둘 수 있다.
+  - raw API 응답 원본
+  - 조사 중간 산출물
+  - 일회성 로그, 스크린샷, 비교 결과
+  - 재호출 방지용 캐시
+- 다음은 `temps`에 두지 않는다.
+  - 실제 애플리케이션 소스코드
+  - Next.js/백엔드/테스트 프로젝트 스캐폴드
+  - 장기 유지되는 fixture source-of-truth
+  - Redis/DB 데이터 디렉터리 같은 런타임 자산
+- 실제 프로젝트 자산은 항상 레포 루트 또는 소스 디렉터리 아래에 두고, `temps`는 source-of-truth로 취급하지 않는다.
