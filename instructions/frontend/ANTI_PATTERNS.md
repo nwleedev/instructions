@@ -1,6 +1,6 @@
 # Frontend Anti-Patterns
 
-이 문서는 React 기반 프론트엔드에서 Codex와 개발자가 반복해서 피해야 하는 금지 패턴을 정리한다.
+이 문서는 React 기반 프론트엔드에서 Codex, Claude와 개발자가 반복해서 피해야 하는 금지 패턴을 정리한다.
 
 원칙:
 
@@ -447,7 +447,7 @@ const isSubmitting = navigation.state === "submitting";
 
 이유:
 
-- 아직 필요하지 않은 props 확장은 Codex가 반복해서 남용하기 쉬운 패턴이다.
+- 아직 필요하지 않은 props 확장은 Codex, Claude가 반복해서 남용하기 쉬운 패턴이다.
 - public API가 아닌 내부 구현 컴포넌트는 현재 책임에 맞는 최소 props만 가진다.
 
 ---

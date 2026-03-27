@@ -2,7 +2,7 @@
 
 ## 목적
 
-이 문서는 React 프론트엔드 테스트에서 Codex CLI와 개발자가 반복해서 피해야 하는 **금지 패턴**을 정리한다.
+이 문서는 React 프론트엔드 테스트에서 Codex, Claude와 개발자가 반복해서 피해야 하는 **금지 패턴**을 정리한다.
 
 원칙:
 
@@ -21,7 +21,7 @@
 
 - 이 패턴은 테스트를 명세가 아니라 결과 보고서로 만든다.
 - 실패 테스트가 먼저 없으면 구현이 정말 필요한 변경인지 증명하기 어렵다.
-- Codex CLI가 가장 자주 빠지는 패턴 중 하나이므로 기본적으로 금지한다.
+- Codex, Claude가 가장 자주 빠지는 패턴 중 하나이므로 기본적으로 금지한다.
 
 위험 신호:
 
@@ -389,11 +389,11 @@ render(
     <Route path="/users/:id" initialEntry="/users/123">
       <UserPage />
     </Route>
-  </TestProviders>,
+  </TestProviders>
 );
 
 expect(
-  await screen.findByRole("heading", { name: /ada/i }),
+  await screen.findByRole("heading", { name: /ada/i })
 ).toBeInTheDocument();
 ```
 
@@ -422,12 +422,12 @@ vi.mock("../model/useUserQuery", () => ({
 server.use(
   http.get("/api/users/1", () => {
     return HttpResponse.json({ id: "1", name: "Ada" });
-  }),
+  })
 );
 
 render(<UserPage userId="1" />);
 expect(
-  await screen.findByRole("heading", { name: /ada/i }),
+  await screen.findByRole("heading", { name: /ada/i })
 ).toBeInTheDocument();
 ```
 
