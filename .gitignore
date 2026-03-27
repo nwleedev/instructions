@@ -379,7 +379,11 @@ psd
 thumb
 sketch
 
-# Codex Sessions
-scripts/*-session.sh
+# Codex, Claude Code Sessions
+sessions/*.sh
 store/
 browser-automation/
+
+# Skills Worktrees
+/.claude/worktrees/
+/.agents/worktrees/
