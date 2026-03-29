@@ -44,6 +44,22 @@ Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 
 
 작업을 시작할 때 그리고 끝날 때 해당 파일에 있는 규칙대로 세션을 기록한다.
 
+세션 기록 강행 규칙:
+
+- 세션 기록은 권장이 아니라 작업 게이트다.
+- 실질적인 탐색, 조사, 구현, 검증을 시작하기 전에는 다음 preflight를 끝낸다.
+  - 현재 세션과 세션 디렉터리를 확인한다.
+  - `PLANS.md`를 다시 읽고 작업 시작 가능 여부를 판정한다.
+  - `TICKETS.md` 상단의 `Original Goal`, `Current Best Next Ticket`, `Why This Advances The Original Goal`, `Deferred But Important`를 확인하거나 보강한다.
+  - 현재 턴의 작업을 `TICKETS.md`와 `PROGRESS.md`에 시작 상태로 기록한다.
+- 사용자가 새 프롬프트를 주거나 `PLANS.md`에 내용을 추가하면, 기존 판정을 재사용하지 않고 `PLANS.md`를 다시 읽어 추가 정보 필요 여부를 재판정한다.
+- 작업 중 세션 기록 누락을 발견하면, 본 작업보다 먼저 세션 파일을 보정한다.
+- 사용자에게 완료를 보고하기 전에는 다음 postflight를 끝낸다.
+  - `TICKETS.md` 상태와 다음 티켓을 갱신한다.
+  - `PROGRESS.md`의 `Done`, `In progress`, `Blocked`, `Next`를 갱신한다.
+  - 필요 시 `DECISIONS.md`, `RESEARCH.md`를 반영한다.
+- 종료 기록이 비어 있으면 완료, 해결, 끝남처럼 작업이 종료된 것처럼 보고하지 않는다.
+
 ## 실패 대응 원칙
 
 **Codex, Claude가 특정 작업에 실패했을 때 다음과 같은 상황을 방지하기 위함입니다.**
