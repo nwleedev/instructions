@@ -15,6 +15,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 - 기존 `instructions/<task_type>` 문서가 너무 약해서 실제 작업 기준으로 쓰기 어려울 때
 - 특정 분야에 대해 안티패턴, 아키텍처, 검증 기준, 템플릿을 보강해야 할 때
 - 사용자가 "이 분야 작업 전에 Codex, Claude가 뭘 참고해야 하는가"를 문서화하려 할 때
+- 다른 프로젝트에 portable core만 sync한 뒤, 그 프로젝트 전용 작업 분야 하네스를 처음 만들 때
 
 ## 빠른 절차 (본 에이전트)
 
@@ -39,6 +40,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 - 최종 산출물이 어느 `task_type` 아래에 위치할지 결정한다.
 - 프로젝트 전용 예시나 검증 이력을 코어 문서에 넣을지 여부를 먼저 검토하지 않는다. 먼저 `instructions/HARNESS_PORTABILITY.md`의 분리 원칙을 적용한다.
 - 이미 있는 하네스가 있다면 우선 읽고, 덮어쓰지 말고 보강 방향을 잡는다.
+- 다른 프로젝트에서 core만 sync한 상태라면, 이 스킬이 해당 프로젝트의 첫 로컬 작업 분야 하네스를 만드는 공식 경로임을 전제로 한다.
 
 ## 작업 분야 Intake
 
@@ -199,7 +201,7 @@ Agent tool 호출:
 
 ## 기존 하네스 재사용 원칙
 
-- 이미 `instructions/frontend`, `instructions/research`처럼 충분한 하네스가 있으면 새 디렉터리를 만들지 않는다.
+- 이미 현재 프로젝트에 충분한 `instructions/<task_type>` 로컬 하네스가 있으면 새 디렉터리를 만들지 않는다.
 - 부족한 섹션만 보강한다.
 - 새 하네스는 기존 하네스로는 반복적으로 커버되지 않는 경우에만 만든다.
 - 새 하네스를 만들었다면 discovery를 위해 `AGENTS.md`와 `instructions/INDEX.md` 갱신까지 완료해야 한다.

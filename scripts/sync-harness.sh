@@ -22,7 +22,7 @@ usage() {
   - sessions/*
   - instructions/*.md
   - instructions/templates/*
-  - 현재 저장소가 소유한 .agents 하위 자산
+  - .agents/skills/harness-engine/*
 
 비관리 대상:
   - store/*
@@ -30,6 +30,7 @@ usage() {
   - instructions/frontend/*
   - instructions/learning-mode/*
   - 대상 프로젝트의 다른 .agents 자산
+  - 대상 프로젝트의 instructions/<task_type>/* 로컬 하네스
 EOF
 }
 
@@ -73,12 +74,8 @@ collect_source_paths() {
       find "instructions/templates" -type f | LC_ALL=C sort
     fi
 
-    if [ -d ".agents/skills" ]; then
-      find ".agents/skills" -type f | LC_ALL=C sort
-    fi
-
-    if [ -d ".agents/agents" ]; then
-      find ".agents/agents" -type f | LC_ALL=C sort
+    if [ -d ".agents/skills/harness-engine" ]; then
+      find ".agents/skills/harness-engine" -type f | LC_ALL=C sort
     fi
   ) | sed 's#^\./##' | awk 'NF && !seen[$0]++'
 }

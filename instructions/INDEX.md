@@ -31,16 +31,10 @@
 
 ## 작업 분야 하네스 적용
 
-- 공통 규칙을 읽은 뒤, 현재 작업의 주도 분야를 판정하여 해당 `instructions/<task_type>/INDEX.md`를 추가 적용한다.
-- 조사/비교/교차검증 중심 작업은 `instructions/research/INDEX.md`를 사용한다.
-- 프론트엔드 구현 중심 작업은 `instructions/frontend/INDEX.md`를 사용한다.
-- 학습 진행/학습 설계 중심 작업은 `instructions/learning-mode/INDEX.md`를 사용한다.
-- 기존 하네스로 설명되지 않는 반복 작업만 새 하네스 후보로 보고, 이 경우 `harness-engine` 스킬의 판정 절차를 따른다.
-
-## 학습 모드 하네스
-
-- 학습 모드 관련 작업은 `instructions/learning-mode/INDEX.md`를 진입점으로 사용한다.
-- 학습 하네스는 조사 하네스를 대체하지 않고, 필요 시 `instructions/research/*.md`를 보조 계층으로 함께 사용한다.
+- 공통 규칙을 읽은 뒤, 현재 프로젝트에 `instructions/<task_type>/INDEX.md` 같은 로컬 작업 분야 하네스가 있는지 확인한다.
+- 로컬 작업 분야 하네스가 있으면 해당 문서를 추가 적용한다.
+- 로컬 작업 분야 하네스가 없으면 `harness-engine` 스킬을 사용해 생성 또는 보강한다.
+- 이 저장소의 `instructions/frontend/*`, `instructions/research/*`, `instructions/learning-mode/*`는 repo-local 상세 하네스 예시이며, 모든 프로젝트의 기본 복사 범위로 가정하지 않는다.
 
 ## 하네스 이식성과 환류
 

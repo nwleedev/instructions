@@ -20,7 +20,7 @@
 - 작업 분야 판정 규칙
 - 공통 세션 규칙
 - 실패 대응 원칙
-- 작업 분야별 코어 하네스 (`instructions/research/*`, `instructions/frontend/*`, `instructions/learning-mode/core/*`)
+- 하네스 생성 도구와 공통 템플릿 (`harness-engine`, `instructions/templates/*`)
 
 규칙:
 
@@ -56,6 +56,20 @@
 - 다른 프로젝트에 통째로 복사하지 않는다.
 - 복사하더라도 참고용으로만 두고, 새 프로젝트에서 다시 검증한다.
 
+## 이 저장소의 repo-local 상세 하네스
+
+이 저장소의 아래 디렉터리는 portable core가 아니라 repo-local 상세 하네스 또는 예시 묶음이다.
+
+- `instructions/frontend/*`
+- `instructions/research/*`
+- `instructions/learning-mode/*`
+
+규칙:
+
+- 현재 저장소 안에서는 계속 사용할 수 있다.
+- 다른 프로젝트의 기본 복사 범위에는 넣지 않는다.
+- 다른 프로젝트에서는 필요한 작업 분야 하네스를 그 프로젝트 안에서 별도로 정의하거나 `harness-engine`으로 생성한다.
+
 ## 권장 복사 범위
 
 ### 필수 복사
@@ -66,26 +80,32 @@
 - `instructions/SESSIONS.md`
 - `instructions/FAILURE.md`
 - `instructions/COMMENTS.md`
-- 필요한 작업 분야의 코어 하네스
+- `instructions/HARNESS_PORTABILITY.md`
+- `instructions/RESEARCH.md`
+- `instructions/templates/*`
+- `sessions/*`
+- `.agents/skills/harness-engine/*`
 
 ### 조건부 복사
 
 - 특정 프로젝트용 adapter 문서
 - 팀 운영 규칙
-- 도메인별 템플릿
+- 각 프로젝트에서 직접 만든 `instructions/<task_type>/*` 로컬 하네스
 
 ### 선택 복사
 
 - 과거 드라이런
 - 샘플 산출물
 - 현재 저장소 전용 evidence 문서
+- 이 저장소의 repo-local 상세 하네스
 
 ## 복사 후 반드시 해야 하는 일
 
 1. 주도 작업 분야를 판정하고 필요한 코어 하네스를 읽는다.
-2. 현재 프로젝트의 세션 문서, 검증 명령, 기술 스택을 adapter에 연결한다.
-3. 대표 작업 1개로 드라이런을 수행해 코어와 adapter의 경계를 검증한다.
-4. 현재 프로젝트에서만 필요한 예시나 증빙은 local evidence로 따로 둔다.
+2. 현재 프로젝트에 로컬 작업 분야 하네스가 없다면 `harness-engine`으로 생성한다.
+3. 현재 프로젝트의 세션 문서, 검증 명령, 기술 스택을 adapter에 연결한다.
+4. 대표 작업 1개로 드라이런을 수행해 코어와 adapter의 경계를 검증한다.
+5. 현재 프로젝트에서만 필요한 예시나 증빙은 local evidence로 따로 둔다.
 
 ## 하네스 동기화 스크립트
 
@@ -104,7 +124,7 @@
 - `sessions/*`
 - `instructions/*.md`
 - `instructions/templates/*`
-- 현재 저장소가 소유한 `.agents` 하위 자산
+- `.agents/skills/harness-engine/*`
 
 ### v1 비관리 대상
 
@@ -113,6 +133,7 @@
 - `instructions/frontend/*`
 - `instructions/learning-mode/*`
 - 대상 프로젝트의 다른 `.agents` 스킬, 에이전트, 로컬 자산
+- 각 프로젝트가 따로 만든 `instructions/<task_type>/*` 로컬 하네스
 
 ### 소유권 추적
 
@@ -125,7 +146,7 @@
 
 - 관리 대상 파일은 source의 최신 내용으로 덮어쓴다.
 - source에서 사라진 관리 대상 파일은 manifest 기준으로만 제거한다.
-- `.agents` 아래에서는 현재 저장소가 소유한 경로만 갱신한다.
+- `.agents` 아래에서는 `harness-engine` 경로만 갱신한다.
 - 대상 프로젝트에 이미 있던 다른 `.agents` 자산은 유지한다.
 
 ## Change Request Packet

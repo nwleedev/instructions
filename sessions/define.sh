@@ -4,7 +4,7 @@ set -eu
 usage() {
   cat <<'EOF'
 사용법:
-  scripts/create-session.sh <session_id>
+  sessions/define.sh <session_id>
 
 설명:
   ./store/<session_id>/ 아래에 세션 기록용 표준 파일/폴더 구조를 생성합니다.
@@ -56,77 +56,90 @@ write_if_missing "$STORE_DIR/PLANS.md" "# PLANS.md
 
 - (여기에 이번 세션의 목표를 적습니다.)
 
-## 유의점
+## 범위
+
+- 포함:
+- 제외:
+
+## 완료 기준
+
+- (검증 가능한 완료 기준을 적습니다.)
+
+## 관련 경로 / 문서
+
+- 관련 파일:
+- 참고 문서:
+
+## 작업 계획
+
+- 1.
+- 2.
+- 3.
+
+## 미정 사항 처리 방식
+
+- (보수적 기본값 / 중요한 항목만 질문 / 모든 미정 항목 질문 중 선택)
 "
 
 write_if_missing "$STORE_DIR/TICKETS.md" "# TICKETS.md
 > 작업 상태의 단일 진실원천(SSOT)  
 > 현재 무엇이 남아 있고, 무엇이 완료되었는지를 판단할 때 이 파일을 기준으로 한다.
 
+## Original Goal
+
+- (사용자의 원래 목표를 적습니다.)
+
+## Current Best Next Ticket
+
+- T-0001 (다음에 바로 수행할 티켓을 적습니다.)
+
+## Why This Advances The Original Goal
+
+- (왜 지금 이 티켓이 원래 목표를 진전시키는지 적습니다.)
+
+## Deferred But Important
+
+- 없음
+
 ## Active
 
-- [ ] T-001 사용자 로그인 API 구현  
-  - tickets/T-001-login-api.md  
-- [ ] T-002 에러 처리 공통 모듈 정리 (Blocked: 스펙 미확정)  
-  - tickets/T-002-error-handling.md  
+- 없음
 
 ## Done
 
-- [x] T-000 프로젝트 초기 세팅  
-  - tickets/T-000-bootstrap.md
+- 없음
 "
 
 write_if_missing "$STORE_DIR/PROGRESS.md" "# PROGRESS.md
-## 2026-01-22 00:00
+## 2026-01-01 00:00
 ### Done
-- T-000 초기 세팅 완료 (PR #12)
+- 없음
 
 ### In Progress
-- T-001 로그인 API 구현
+- 없음
 
 ### Blocked
 - 없음
 
 ### Next
-- 인증 토큰 설계 검토
-
----
-
-## 2026-01-23 00:01
-### Done
-- 없음
-
-### In Progress
-- T-001
-
-### Blocked
-- T-002 (에러 정책 미확정)
-
-### Notes
-- 에러 코드 체계 결정 필요 (DECISIONS 예정)
+- (다음 세션에서 바로 할 일을 적습니다.)
 "
 
 write_if_missing "$STORE_DIR/DECISIONS.md" "# DECISIONS.md
 ## Active
-- D-001 인증 방식으로 JWT 사용  
-  - decisions/D-001-jwt-auth.md
+- 없음
 
 ## Superseded
-- D-000 세션 기반 인증  
-  - decisions/D-000-session-auth.md
+- 없음
 "
 
 write_if_missing "$STORE_DIR/UPDATES.md" "# UPDATES.md
-# UPDATES.md
 
 | 파일                                    | 마지막 확인 날짜(\`Last Read\`) | 마지막 수정 날짜 |
 | --------------------------------------- | ----------------------------- | ---------------- |
-| \`AGENTS.md\`                             | 2026-03-15 00:29              | 2026-03-14 19:42 |
-| \`.agents/skills/code-writing/SKILL.md\`  | 2026-03-15 00:29              | 2026-03-10 16:44 |
-| \`.agents/skills/plan-tickets/SKILL.md\`  | 2026-03-14 22:46              | 2026-03-13 23:46 |
-| \`.agents/skills/goal-review/SKILL.md\`   | 2026-03-15 00:29              | 2026-03-13 23:45 |
-| \`.agents/skills/task-prep/SKILL.md\`     | 2026-03-15 00:29              | 2026-03-13 23:46 |
-| \`.agents/skills/ticket-review/SKILL.md\` | 2026-03-14 19:36              | 2026-03-13 23:45 |
+| \`AGENTS.md\`                           |                             |                  |
+| \`instructions/INDEX.md\`               |                             |                  |
+| \`instructions/SESSIONS.md\`            |                             |                  |
 
 ## 운용 메모
 
@@ -137,26 +150,15 @@ write_if_missing "$STORE_DIR/UPDATES.md" "# UPDATES.md
 "
 
 write_if_missing "$STORE_DIR/RESEARCH.md" "# RESEARCH.md
-## Authentication
-### JWT Best Practices
-- Source: https://example.com/jwt-best-practices
-- Key Takeaways:
-  - 토큰 만료 시간은 짧게
-  - 알고리즘 명시
+## Topic
+
+### Claim or Question
+
+- Source:
+- Evidence Notes:
+- Working Interpretation:
 - How We Use This:
-  - 로그인 API 토큰 만료 15분 적용
 - Related Decisions:
-  - D-001
-
----
-
-## Error Handling
-### REST API Error Codes
-- Source: https://example.com/api-errors
-- Key Takeaways:
-  - 표준 HTTP 상태 코드 사용
-- How We Use This:
-  - 공통 에러 응답 포맷 설계 참고
 "
 
 echo "완료: $STORE_DIR"
