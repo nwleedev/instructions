@@ -380,7 +380,6 @@ thumb
 sketch
 
 # Codex, Claude Code Sessions
-sessions/*.sh
 store/
 browser-automation/
 
