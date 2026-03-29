@@ -87,6 +87,47 @@
 3. 대표 작업 1개로 드라이런을 수행해 코어와 adapter의 경계를 검증한다.
 4. 현재 프로젝트에서만 필요한 예시나 증빙은 local evidence로 따로 둔다.
 
+## 하네스 동기화 스크립트
+
+현재 저장소에서 다른 프로젝트로 하네스 자산을 설치하거나 업데이트할 때는 `scripts/sync-harness.sh`를 사용한다.
+
+### 기본 사용법
+
+- `scripts/sync-harness.sh --target ../some-project`
+- `scripts/sync-harness.sh --target ../some-project --dry-run`
+- `scripts/sync-harness.sh --source /path/to/instructions --target ../some-project`
+
+### v1 관리 대상
+
+- 루트 `AGENTS.md`
+- 루트 `CLAUDE.md`
+- `sessions/*`
+- `instructions/*.md`
+- `instructions/templates/*`
+- 현재 저장소가 소유한 `.agents` 하위 자산
+
+### v1 비관리 대상
+
+- `store/*`
+- `instructions/research/*`
+- `instructions/frontend/*`
+- `instructions/learning-mode/*`
+- 대상 프로젝트의 다른 `.agents` 스킬, 에이전트, 로컬 자산
+
+### 소유권 추적
+
+- 대상 프로젝트 루트에 `.harness-sync-manifest.json`을 생성한다.
+- manifest에는 현재 스크립트가 관리하는 파일 경로와 마지막 동기화 커밋을 기록한다.
+- 이후 업데이트는 manifest에 기록된 경로만 정리하거나 갱신한다.
+- manifest에 없는 대상 프로젝트의 파일은 비관리 자산으로 간주하고 건드리지 않는다.
+
+### 업데이트 정책
+
+- 관리 대상 파일은 source의 최신 내용으로 덮어쓴다.
+- source에서 사라진 관리 대상 파일은 manifest 기준으로만 제거한다.
+- `.agents` 아래에서는 현재 저장소가 소유한 경로만 갱신한다.
+- 대상 프로젝트에 이미 있던 다른 `.agents` 자산은 유지한다.
+
 ## Change Request Packet
 
 다른 프로젝트에서 하네스를 사용하다가 이 저장소에 반영할 변경이 필요하면,
