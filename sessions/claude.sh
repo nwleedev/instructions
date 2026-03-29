@@ -6,4 +6,4 @@ if [ $# -lt 1 ] || [ -z "${1:-}" ]; then
   exit 1
 fi
 
-CODEX_SESSION_ID="$1" codex resume "$1"
+SESSION_ID="$1" claude --resume "$1"
