@@ -26,6 +26,7 @@
   - 출처: Anthropic Building Effective Agents, CrewAI Crafting Effective Agents
 - 반드시 human-in-the-loop 검증을 포함해야 한다.
 - 이 템플릿으로 생성한 어댑터는 "초안" 상태이며, 실제 사용 후 reflexion 루프를 통해 보강해야 한다.
+- bootstrap으로 파악한 현재 저장소 전용 예시와 실패 사례는 기본적으로 `local evidence pack` 후보이며, 바로 portable core 규칙으로 승격하지 않는다.
 
 ## 하이브리드 구조에서의 역할 분담
 
@@ -94,6 +95,11 @@
 **신규 모드**: 서브에이전트가 하네스 산출물 생성 + `references/adapters/<new_task_type>.md` 저장.
 
 **보충 모드**: 서브에이전트가 어댑터 파일을 수정하지 않고, 보충된 도메인 지식을 하네스 산출물(`instructions/<task_type>/*.md`)에 직접 반영한다. 기존 어댑터의 방법론은 그대로 유지한다.
+
+전달 규칙:
+
+- 현재 프로젝트 전용 경로, 명령, 예시는 `portable core`가 아니라 adapter 또는 local evidence 후보로 표시한다.
+- 다른 프로젝트로 일반화할 근거가 없으면 공통 규칙 문구로 쓰지 않는다.
 
 신규 모드에서 저장할 때:
 

@@ -29,10 +29,24 @@
 - 단, 단순 구현 세부이거나 실질적인 선택지가 하나뿐인 경우에는 보수적으로 진행할 수 있다.
 - 코드 중복 대응: 여러 개의 코드가 중복된 기능을 제공하는 상황이 발생하는지 체크하고 해당 코드를 별도의 모듈로 분리하거나 일반화하는 방법을 조사하고 작업에 반영.
 
+## 작업 분야 하네스 적용
+
+- 공통 규칙을 읽은 뒤, 현재 작업의 주도 분야를 판정하여 해당 `instructions/<task_type>/INDEX.md`를 추가 적용한다.
+- 조사/비교/교차검증 중심 작업은 `instructions/research/INDEX.md`를 사용한다.
+- 프론트엔드 구현 중심 작업은 `instructions/frontend/INDEX.md`를 사용한다.
+- 학습 진행/학습 설계 중심 작업은 `instructions/learning-mode/INDEX.md`를 사용한다.
+- 기존 하네스로 설명되지 않는 반복 작업만 새 하네스 후보로 보고, 이 경우 `harness-engine` 스킬의 판정 절차를 따른다.
+
 ## 학습 모드 하네스
 
 - 학습 모드 관련 작업은 `instructions/learning-mode/INDEX.md`를 진입점으로 사용한다.
 - 학습 하네스는 조사 하네스를 대체하지 않고, 필요 시 `instructions/research/*.md`를 보조 계층으로 함께 사용한다.
+
+## 하네스 이식성과 환류
+
+- 여러 프로젝트에 복사할 규칙은 `portable core`, `project adapter`, `local evidence pack`으로 분리한다.
+- 프로젝트별 차이와 과거 증빙은 공통 코어 규칙으로 승격하지 않는다.
+- 복사 사용 중 생긴 문제를 원본 저장소로 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
 
 ## 사용자 확인이 필요한 경우의 선택지 제공
 

@@ -8,6 +8,34 @@
 
 Codex, Claude를 처음 실행할 때 & 컨텍스트가 압축되었을 때에도 AGENTS.md, `instructions/INDEX.md` 파일을 **반드시** 읽고 어떻게 작업해야 하는지 파악한다.
 
+## 진입점 규칙
+
+- 이 저장소의 루트 진입점은 `AGENTS.md`다.
+- `CLAUDE.md`는 별도 규칙 저장소가 아니라, `AGENTS.md`를 가리키는 얇은 shim으로 유지한다.
+- 도구별 예외 규칙이 정말 필요할 때만 `AGENTS.md`와 별도로 분기하고, 가능한 한 공통 규칙은 `AGENTS.md`와 `instructions/*`에만 둔다.
+
+## 작업 분야 하네스 선택
+
+모든 작업은 아래 순서로 필요한 하네스를 추가 적용한다.
+
+1. 공통 필독
+   - `AGENTS.md`
+   - `instructions/INDEX.md`
+   - `instructions/SESSIONS.md`
+   - `instructions/FAILURE.md`
+2. 주도 작업 분야 판정
+   - 조사/비교/교차검증 중심 작업: `instructions/research/INDEX.md`
+   - 프론트엔드 구현/테스트 중심 작업: `instructions/frontend/INDEX.md`
+   - 학습 진행/학습 설계 중심 작업: `instructions/learning-mode/INDEX.md`
+3. 분야별 세부 문서 확장
+   - 각 `INDEX.md`가 추가로 읽으라고 지시하는 아키텍처, 안티패턴, 검증, 템플릿 문서를 이어서 읽는다.
+
+규칙:
+
+- 기존 하네스로 설명 가능한 작업이면 새 작업 분야를 만들지 않는다.
+- 기존 하네스로 설명되지 않는 반복 작업만 새 하네스 후보로 본다.
+- 새 하네스 판단 또는 보강이 필요하면 `harness-engine` 스킬을 사용한다.
+
 ## 세션
 
 Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 대화 맥락 및 흐름의 유지를 하기 위해 **세션**이라는 개념을 사용한다.
@@ -38,68 +66,8 @@ Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 
 
 **주석에 대한 상세 지침은 `instructions/COMMENTS.md` 파일을 참고한다.**
 
-<!-- ## 프론트엔드
+## 이식성과 환류
 
-**프론트엔드에 대한 상세 지침은 다음과 같은 파일을 참고한다.**
-
-- **`instructions/frontend/INDEX.md`**
-- **`instructions/frontend/ARCHITECTURE.md`**
-
-**금지 패턴과 동일한 구조를 코드 작성 및 코드 수정에 반영하지 않는다.**
-
-- `instructions/frontend/ANTI_PATTERNS.md`
-
-**프론트엔드 테스트에 대한 상세 지침은 다음과 같은 파일을 참고한다.**
-
-- **`instructions/frontend/TESTING.md`**
-
-**금지 패턴에 해당하는 구조를 테스트 코드 작성 및 수정, 그리고 테스트 실행에 반영하지 않는다.**
-
-- `instructions/frontend/TEST_ANTI_PATTERNS.md`
-
-## 자료 조사 하네스
-
-**자료 조사 하네스에 대한 상세 지침은 다음과 같은 파일을 참고한다.**
-
-- **`instructions/research/INDEX.md`**
-- **`instructions/research/ARCHITECTURE.md`**
-
-**금지 패턴과 동일한 구조를 조사 수행 및 조사 결과 문서화에 반영하지 않는다.**
-
-- `instructions/research/ANTI_PATTERNS.md`
-
-**자료 조사 결과의 완료 기준과 검증 기준은 다음 파일을 참고한다.**
-
-- **`instructions/research/VALIDATION.md`**
-
-**조사 계획과 조사 기록 템플릿은 다음 파일을 참고한다.**
-
-- `instructions/research/templates/PLANS-RESEARCH-TEMPLATE.md`
-- `instructions/research/templates/RESEARCH-ENTRY-TEMPLATE.md`
-- `instructions/research/templates/CLAIM-MAP-TEMPLATE.md`
-
-## 학습 모드 하네스
-
-**학습 모드 하네스에 대한 상세 지침은 다음과 같은 파일을 참고한다.**
-
-- **`instructions/learning-mode/INDEX.md`**
-- **`instructions/learning-mode/core/ARCHITECTURE.md`**
-- **`instructions/learning-mode/core/PORTABILITY.md`**
-
-**금지 패턴과 동일한 구조를 학습 진행, 학습 문서화, 드라이런 검증에 반영하지 않는다.**
-
-- `instructions/learning-mode/core/ANTI_PATTERNS.md`
-
-**학습 모드 하네스의 완료 기준과 검증 기준은 다음 파일을 참고한다.**
-
-- **`instructions/learning-mode/core/VALIDATION.md`**
-
-**학습 계획과 학습 로그 템플릿은 다음 파일을 참고한다.**
-
-- `instructions/learning-mode/templates/LEARNING-PLAN-TEMPLATE.md`
-- `instructions/learning-mode/templates/LEARNING-LOG-TEMPLATE.md`
-- `instructions/learning-mode/templates/PROJECT-ADAPTER-TEMPLATE.md`
-
-**현재 저장소에서의 검증 증빙은 필요할 때만 아래 문서를 참고한다.**
-
-- `instructions/learning-mode/evidence/EVIDENCE_INDEX.md` -->
+- 여러 프로젝트로 복사해서 쓰는 하네스는 `portable core`, `project adapter`, `local evidence pack`을 분리해 관리한다.
+- 프로젝트마다 달라지는 경로, 검증 명령, 예시, 과거 증빙은 코어 규칙으로 승격하지 않는다.
+- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.

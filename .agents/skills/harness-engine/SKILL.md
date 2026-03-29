@@ -22,13 +22,14 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 2. 대표 분류 집합에서 후보 `task_type`를 먼저 고른다.
 3. 기존 `instructions/<task_type>` 하네스가 있는지 확인한다.
 4. 기존 하네스를 재사용할지, 새 하네스를 만들지 판단한다.
-5. 도메인 어댑터를 로드하고 Coverage 갭 체크를 수행한다.
-6. Coverage 갭 또는 bootstrap이 필요하면 사용자 검증을 수행한다 (human-in-the-loop).
-7. **하네스 생성 서브에이전트를 실행한다.**
-8. **검증 서브에이전트를 실행한다.**
-9. 검증 결과를 확인하고, 보강이 필요하면 7~8을 반복한다.
-10. 새 `task_type`를 만들었다면 `AGENTS.md`와 `instructions/INDEX.md`를 갱신한다.
-11. 세션 기록(TICKETS.md, PROGRESS.md, DECISIONS.md)을 갱신한다.
+5. 산출물을 `portable core`, `project adapter`, `local evidence pack` 중 어디에 둘지 먼저 판정한다.
+6. 도메인 어댑터를 로드하고 Coverage 갭 체크를 수행한다.
+7. Coverage 갭 또는 bootstrap이 필요하면 사용자 검증을 수행한다 (human-in-the-loop).
+8. **하네스 생성 서브에이전트를 실행한다.**
+9. **검증 서브에이전트를 실행한다.**
+10. 검증 결과를 확인하고, 보강이 필요하면 8~9를 반복한다.
+11. 새 `task_type`를 만들었다면 `AGENTS.md`와 `instructions/INDEX.md`를 갱신한다.
+12. 세션 기록(TICKETS.md, PROGRESS.md, DECISIONS.md)을 갱신한다.
 
 ## 작업 시작 전 확인
 
@@ -36,6 +37,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 - `AGENTS.repository.md`가 있으면 읽었는지 확인한다.
 - 사용자 요청만으로 범위가 닫히는지 확인한다.
 - 최종 산출물이 어느 `task_type` 아래에 위치할지 결정한다.
+- 프로젝트 전용 예시나 검증 이력을 코어 문서에 넣을지 여부를 먼저 검토하지 않는다. 먼저 `instructions/HARNESS_PORTABILITY.md`의 분리 원칙을 적용한다.
 - 이미 있는 하네스가 있다면 우선 읽고, 덮어쓰지 말고 보강 방향을 잡는다.
 
 ## 작업 분야 Intake
@@ -81,6 +83,24 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 
 - 스택 감지 순서: 프로젝트 AGENTS.md/CLAUDE.md 선언 → 설정 파일 확인 → 사용자에게 선택 요청
 - 스택 정보를 서브에이전트에 함께 전달한다.
+
+## 이식성 판정
+
+하네스를 만들거나 보강하기 전에, 추가할 내용을 아래 셋 중 어디에 두어야 하는지 먼저 판정한다.
+
+1. `portable core`
+   - 다른 프로젝트에도 그대로 유지될 규칙
+   - 진입점, 작업 흐름, 금지 패턴, 완료 기준
+2. `project adapter`
+   - 경로, 검증 명령, 로컬 정책, 프로젝트 스택 같은 연결 지점
+3. `local evidence pack`
+   - 현재 저장소 전용 드라이런, 샘플, 과거 실패 기록
+
+규칙:
+
+- 현재 저장소의 예시, 절대경로, 기존 실패 이력은 기본적으로 `local evidence pack` 후보로 본다.
+- 특정 프로젝트의 연결부는 코어로 올리지 말고 adapter 성격의 문서나 템플릿으로 민다.
+- 다른 프로젝트에서 하네스를 복사해 쓴 뒤 생긴 문제를 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
 
 ## 하네스 생성 서브에이전트 실행
 
@@ -173,6 +193,7 @@ Agent tool 호출:
 - DECISIONS.md: 결정 사항 기록
 - RESEARCH.md: 서브에이전트가 반환한 조사 근거 요약을 기록
 - AGENTS.md, instructions/INDEX.md: 새 task_type 생성 시 discovery 등록
+- 다른 프로젝트 환류 요청이 있으면 change request packet의 핵심 필드를 DECISIONS 또는 RESEARCH에 남긴다.
 
 ## 기존 하네스 재사용 원칙
 
@@ -180,6 +201,7 @@ Agent tool 호출:
 - 부족한 섹션만 보강한다.
 - 새 하네스는 기존 하네스로는 반복적으로 커버되지 않는 경우에만 만든다.
 - 새 하네스를 만들었다면 discovery를 위해 `AGENTS.md`와 `instructions/INDEX.md` 갱신까지 완료해야 한다.
+- 기존 하네스를 보강할 때도 portable core와 local evidence를 섞지 않는다.
 
 ## 금지
 
@@ -189,6 +211,8 @@ Agent tool 호출:
 - 검증 서브에이전트를 생략하기
 - Anti/Good 쌍의 한쪽만 작성하고 완료로 처리하기
 - 최종 문서에 출처를 남기지 않고 `RESEARCH.md`에만 근거를 두기
+- 현재 저장소 전용 예시를 portable core 규칙으로 승격하기
+- 복사형 사용 중 생긴 문제를 재현 정보 없이 코어 변경 요청으로 올리기
 
 ## 참고 파일
 
