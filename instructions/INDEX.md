@@ -48,6 +48,14 @@
 - 프로젝트별 차이와 과거 증빙은 공통 코어 규칙으로 승격하지 않는다.
 - 복사 사용 중 생긴 문제를 원본 저장소로 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
 
+## 하네스 문제 보고
+
+- 실제 프로젝트에서 `AGENTS.md`, `instructions/*`, `harness-engine`, 세션 규칙 같은 하네스 계층 문제를 발견하면 보고서를 자동으로 작성한다.
+- 기본 템플릿은 `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`를 사용한다.
+- 기본 경로는 `store/<session_id>/temps/harness-issues/`이며, 세션 디렉터리가 없는 환경에서는 프로젝트의 `temps/harness-issues/`를 사용한다.
+- 보고서는 프롬프트 덤프가 아니라 재현 절차, 기대 동작, 영향 범위, 일반화 가능성을 포함한 구조화 리포트여야 한다.
+- 보고서 작성 후 현재 작업에 미치는 영향은 `PROGRESS.md`에 남기고, upstream 변경 후보는 `instructions/HARNESS_PORTABILITY.md`의 change request packet으로 승격한다.
+
 ## 사용자 확인이 필요한 경우의 선택지 제공
 
 - 작업 중 모호한 사항을 발견할 때마다 사용자에게 선택지를 제시하고 대기. 모호한 사항을 여러 개 발견했을 경우 각 사항에 대해서 전부 선택지를 제시할 것.

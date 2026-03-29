@@ -118,3 +118,14 @@
 - evidence
 
 재현 정보와 일반화 판단이 없으면 코어 변경 요청으로 승격하지 않는다.
+
+## 실제 프로젝트 보고 템플릿
+
+하네스를 다른 프로젝트에 복사해 사용할 수 있도록, 아래 템플릿을 portable core의 기본 부속물로 유지한다.
+
+- `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`
+
+역할:
+
+- 실제 프로젝트에서 하네스 계층 문제가 발생했을 때 즉시 구조화 리포트를 남긴다.
+- upstream change request packet으로 압축하기 전의 로컬 원본 기록 역할을 한다.

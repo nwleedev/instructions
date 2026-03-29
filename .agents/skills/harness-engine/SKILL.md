@@ -101,6 +101,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 - 현재 저장소의 예시, 절대경로, 기존 실패 이력은 기본적으로 `local evidence pack` 후보로 본다.
 - 특정 프로젝트의 연결부는 코어로 올리지 말고 adapter 성격의 문서나 템플릿으로 민다.
 - 다른 프로젝트에서 하네스를 복사해 쓴 뒤 생긴 문제를 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
+- 실제 프로젝트에서 하네스 계층 문제를 만나면 `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`로 로컬 보고서를 먼저 남긴다.
 
 ## 하네스 생성 서브에이전트 실행
 
@@ -194,6 +195,7 @@ Agent tool 호출:
 - RESEARCH.md: 서브에이전트가 반환한 조사 근거 요약을 기록
 - AGENTS.md, instructions/INDEX.md: 새 task_type 생성 시 discovery 등록
 - 다른 프로젝트 환류 요청이 있으면 change request packet의 핵심 필드를 DECISIONS 또는 RESEARCH에 남긴다.
+- 실제 프로젝트에서 수집한 보고서가 있으면 원문 전체 대신 핵심 필드만 추려 upstream 판단 자료로 사용한다.
 
 ## 기존 하네스 재사용 원칙
 
