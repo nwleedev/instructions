@@ -36,12 +36,14 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 ## 작업 시작 전 확인
 
 - 루트 `AGENTS.md`, `instructions/*.md`를 읽었는지 확인한다.
-- `AGENTS.repository.md`가 있으면 읽었는지 확인한다.
+- `instructions/REPOSITORY.md`가 있으면 읽었는지 확인한다.
 - 사용자 요청만으로 범위가 닫히는지 확인한다.
 - 최종 산출물이 어느 `task_type` 아래에 위치할지 결정한다.
 - 프로젝트 전용 예시나 검증 이력을 코어 문서에 넣을지 여부를 먼저 검토하지 않는다. 먼저 `instructions/HARNESS_PORTABILITY.md`의 분리 원칙을 적용한다.
 - 이미 있는 하네스가 있다면 우선 읽고, 덮어쓰지 말고 보강 방향을 잡는다.
 - 다른 프로젝트에서 core만 sync한 상태라면, 이 스킬이 해당 프로젝트의 첫 로컬 작업 분야 하네스를 만드는 공식 경로임을 전제로 한다.
+- 사용자가 해당 도메인에 익숙하지 않다고 명시했다면, `learning-mode`를 병행 적용할지 먼저 판정한다.
+- `references/examples/<task_type>/`가 있으면 참고용 evidence로만 읽고, portable core 규칙처럼 복사하지 않는다.
 - 기존 하네스가 있더라도 아래 최소 계약을 충족하지 못하면 `재사용 가능`으로 판정하지 않는다.
   - `INDEX/ARCHITECTURE/ANTI_PATTERNS/VALIDATION` 묶음 존재
   - 작업 분야에 맞는 직접 예시 코드 또는 직접 사례 존재
@@ -90,6 +92,12 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 ### bootstrap 보충 (Coverage 갭 감지 시)
 
 `references/adapters/bootstrap.md`를 **보충 모드**로 실행한다. 본 에이전트가 사용자 검증(human-in-the-loop)을 수행하고, 확정된 Coverage Contract를 서브에이전트에 전달한다.
+
+### 공식 MCP 권장안 (선택)
+
+- Tavily MCP: 최신 웹 검색과 원문 추출 보강에 적합하다.
+- Context7 MCP: 라이브러리/프레임워크 문서 문맥 보강에 적합하다.
+- 둘 다 선택형 도구이며, 최종 규칙과 인용은 공식 문서 또는 실제 소스 코드로 다시 확인한다.
 
 ### 어댑터가 없는 경우
 
@@ -140,8 +148,8 @@ Agent tool 호출:
 ```
 다음 파일을 읽고 하네스 산출물을 생성해주세요.
 
-1. 생성 지침: .claude/skills/harness-engine/references/GENERATION.md
-2. 산출물 규칙: .claude/skills/harness-engine/references/OUTPUT_CONTRACT.md
+1. 생성 지침: .agents/skills/harness-engine/references/GENERATION.md
+2. 산출물 규칙: .agents/skills/harness-engine/references/OUTPUT_CONTRACT.md
 
 작업 정보:
 - task_type: {task_type}
@@ -185,7 +193,7 @@ Agent tool 호출:
 다음 경로의 하네스 문서만 읽고 검증을 수행해주세요.
 
 하네스 경로: {worktree_path}/instructions/{task_type}/
-검증 기준: .claude/skills/harness-engine/references/VALIDATION.md
+검증 기준: .agents/skills/harness-engine/references/VALIDATION.md
 
 검증 방법:
 1. 하네스 문서만 읽고, 다음 가상 작업을 수행해보세요: {가상 작업 시나리오}
@@ -203,7 +211,7 @@ Agent tool 호출:
 
 ### 검증 결과 처리
 
-- **통과**: worktree 유지. 사용자에게 결과 보고. discovery 등록(AGENTS.md, INDEX.md) 필요 시 수행.
+- **통과**: worktree 유지. 사용자에게 결과 보고. discovery 등록(AGENTS.md, INDEX.md) 필요 시 수행. 본 에이전트는 validation artifact를 세션 경로에 저장한 뒤에만 구현 티켓을 시작한다.
 - **보강 필요**: 검증 보고의 누락/모호/충돌 항목을 하네스 생성 서브에이전트에 전달하여 재실행. 또는 본 에이전트가 직접 보강. 구현은 금지한다.
 
 ## 세션 관리 (본 에이전트 책임)
@@ -214,6 +222,7 @@ Agent tool 호출:
 - PROGRESS.md: 작업 로그 기록
 - DECISIONS.md: 결정 사항 기록
 - RESEARCH.md: 서브에이전트가 반환한 조사 근거 요약을 기록
+- validation artifact: `store/<session_id>/temps/validation/` 또는 `temps/validation/`에 저장
 - AGENTS.md, instructions/INDEX.md: 새 task_type 생성 시 discovery 등록
 - 다른 프로젝트 환류 요청이 있으면 change request packet의 핵심 필드를 DECISIONS 또는 RESEARCH에 남긴다.
 - 실제 프로젝트에서 수집한 보고서가 있으면 원문 전체 대신 핵심 필드만 추려 upstream 판단 자료로 사용한다.

@@ -8,7 +8,9 @@
 
 - 최종 산출물: `instructions/<task_type>/*.md`
 - 임시 메모: `store/<session_id>/temps/*`
-- 스킬 자체 보강 지침: `.claude/skills/harness-engine/**`
+- 스킬 자체 보강 지침: `.agents/skills/harness-engine/**`
+- 스킬 내부 reference example: `.agents/skills/harness-engine/references/examples/<task_type>/*`
+- validation artifact 템플릿: `instructions/templates/HARNESS-VALIDATION-REPORT-TEMPLATE.md`
 - 새 `task_type` 생성 시 discovery용 루트 진입점으로 `AGENTS.md`와 `instructions/INDEX.md`를 함께 갱신
 
 ## 이식성 패키징 규칙
@@ -27,6 +29,7 @@
 - 현재 저장소의 예시와 검증 이력을 코어 문서의 필수 규칙처럼 적지 않는다.
 - 특정 저장소에만 맞는 경로/명령/예시는 adapter나 evidence로 밀어낸다.
 - 새 하네스를 만들 때 project adapter나 local evidence가 필요하면 템플릿 또는 안내 섹션으로 분리한다.
+- 스킬 내부 reference example은 조사와 문서 구조의 참고 자료로만 사용하고, 최종 산출물의 필수 규칙으로 승격하지 않는다.
 
 ## discovery 등록 형식
 
@@ -124,8 +127,10 @@
 하네스를 다른 프로젝트에 복사해 사용할 수 있도록, 아래 템플릿을 portable core의 기본 부속물로 유지한다.
 
 - `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`
+- `instructions/templates/HARNESS-VALIDATION-REPORT-TEMPLATE.md`
 
 역할:
 
 - 실제 프로젝트에서 하네스 계층 문제가 발생했을 때 즉시 구조화 리포트를 남긴다.
 - upstream change request packet으로 압축하기 전의 로컬 원본 기록 역할을 한다.
+- validation report 템플릿은 하네스 검증 통과 여부와 구현 시작 허용 여부를 세션 산출물로 남기는 역할을 한다.

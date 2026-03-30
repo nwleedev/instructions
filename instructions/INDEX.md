@@ -33,6 +33,7 @@
 
 - 공통 규칙을 읽은 뒤, 현재 프로젝트에 `instructions/<task_type>/INDEX.md` 같은 로컬 작업 분야 하네스가 있는지 확인한다.
 - 로컬 작업 분야 하네스가 있으면 해당 문서를 추가 적용한다.
+- 사용자가 해당 도메인에 익숙하지 않다고 명시했거나 프로젝트 분야가 낯설면, `instructions/learning-mode/*`를 주 작업 하네스와 함께 적용한다.
 - 로컬 작업 분야 하네스가 없으면 `harness-engine` 스킬을 사용해 생성 또는 보강한다.
 - 이 저장소의 `instructions/frontend/*`, `instructions/research/*`, `instructions/learning-mode/*`는 repo-local 상세 하네스 예시이며, 모든 프로젝트의 기본 복사 범위로 가정하지 않는다.
 
@@ -55,6 +56,7 @@
 - 세션 기록은 선택이 아니라 공통 작업 절차다.
 - 실질 작업에 들어가기 전에는 `instructions/SESSIONS.md`의 시작 기록 체크리스트를 먼저 끝낸다.
 - 사용자가 새 프롬프트를 추가하거나 `PLANS.md`를 작성/보강하면, `PLANS.md`를 다시 읽고 작업 시작 가능 여부를 재판정한다.
+- `harness-engine`으로 하네스를 생성/보강/감사했다면, 구현 티켓을 시작하기 전에 validation artifact를 세션 경로에 저장한다.
 - 정보 부족이 확인되면 질문을 흩어 묻지 않고, 부족 정보와 추천 선택지를 한 번에 묶어 제시한다.
 - 사용자에게 완료를 보고하기 전에는 `instructions/SESSIONS.md`의 종료 기록 체크리스트를 먼저 끝낸다.
 - 세션 기록 누락을 발견한 상태에서 구현이나 조사만 계속 진행하지 않는다. 먼저 세션 파일을 보정한다.

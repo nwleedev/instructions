@@ -27,6 +27,7 @@
 4. 외부 도구 사용 여부를 확인한다.
    - MCP는 선택 사항이다.
    - Tavily MCP는 예시 도구이지 필수 의존성이 아니다.
+   - Context7 MCP도 예시 도구이며, 공식 라이브러리/프레임워크 문서를 빨리 확인하는 보조 수단으로만 사용한다.
 
 ## Coverage Contract
 
@@ -192,3 +193,5 @@
   - https://modelcontextprotocol.io/docs/concepts/tools
 - Tavily MCP 문서는 검색, 추출, 도메인 제한 검색, 뉴스 검색 같은 조사 보강 패턴을 예시로 제시한다.
   - https://docs.tavily.com/documentation/mcp
+- Context7 문서는 라이브러리 검색과 문서 문맥 조회를 API와 MCP 형태로 제공한다.
+  - https://context7.com/docs/api-guide

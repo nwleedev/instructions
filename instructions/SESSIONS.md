@@ -176,6 +176,23 @@
 3. 마지막 읽은 시각이 더 이전이면 stale로 보고 다시 읽는다.
 4. 다시 읽은 뒤 `UPDATES.md`의 마지막 읽은 시각을 갱신한다.
 
+## Validation Artifact
+
+- `harness-engine`으로 하네스를 생성, 보강, 감사, 검증한 뒤 다음 구현 티켓을 열기 전에는 validation artifact를 남긴다.
+- 기본 경로:
+  - `store/<session_id>/temps/validation/`
+  - 세션 디렉터리가 없으면 `temps/validation/`
+- 기본 파일명:
+  - `HARNESS-VALIDATION-YYYYMMDD-HHMM-{task_type}.md`
+- 기본 템플릿:
+  - `instructions/templates/HARNESS-VALIDATION-REPORT-TEMPLATE.md`
+- artifact에는 최소한 아래가 포함되어야 한다.
+  - 읽은 하네스 경로
+  - 체크리스트 통과 여부
+  - 종합 판정
+  - 구현 시작 허용 여부
+- 이 artifact가 없으면 “하네스 검증 통과 후 구현 시작” 상태로 판정하지 않는다.
+
 ## Original Goal Check
 
 세션 시작, 컨텍스트 압축 후 재개, 티켓 완료 직후에는 아래 3개를 반드시 갱신한다.
@@ -199,6 +216,7 @@
 3. 현재 턴의 작업을 `TICKETS.md`의 `Active` 또는 개별 티켓 파일에 시작 상태로 남긴다.
 4. `PROGRESS.md`의 `In progress` 또는 동등한 시작 로그를 남긴다.
 5. 재개 직후라면 현재 목표, 확인된 사실, 남은 단계, 다음 즉시 실행 항목이 세션 파일만으로 드러나는지 확인한다.
+6. 하네스 생성/보강/감사 작업이라면 validation artifact가 필요한 작업인지 미리 판정한다.
 
 ## TICKETS.md
 
@@ -258,6 +276,7 @@
 1. `TICKETS.md`에서 현재 티켓을 완료, 진행 중, 또는 막힘 상태로 갱신한다.
 2. 다음 티켓과 `Why This Advances The Original Goal`을 갱신한다.
 3. `PROGRESS.md`의 `Done`, `In progress`, `Blocked`, `Next`를 현재 상태로 맞춘다.
+4. 하네스 생성/보강/감사 작업을 마쳤다면 validation artifact를 저장했는지 확인한다.
 4. 결정이나 외부 근거가 추가되었다면 `DECISIONS.md`, `RESEARCH.md`에 반영한다.
 5. 종료 기록이 누락된 상태라면 완료 보고를 하지 않고 먼저 세션 파일을 보정한다.
 

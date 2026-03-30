@@ -9,6 +9,7 @@
 - 공통 규칙은 `portable core`에 둔다.
 - 프로젝트마다 달라지는 연결 지점은 `project adapter`에만 둔다.
 - 현재 저장소에서만 의미 있는 드라이런, 예시, 과거 검증 기록은 `local evidence pack`으로 분리한다.
+- `harness-engine` 내부에 실어 보내는 예시 자산은 reference-only evidence로 취급하고, 대상 프로젝트의 로컬 하네스와 혼동하지 않는다.
 
 ## 3층 패키징
 
@@ -74,7 +75,8 @@
 
 ### 필수 복사
 
-- `AGENTS.md`
+- 루트 `AGENTS.md`
+  - 대상 프로젝트에는 `instructions/templates/AGENTS-TEMPLATE.md`를 source로 사용한 템플릿 버전을 배치한다.
 - `CLAUDE.md`
 - `instructions/INDEX.md`
 - `instructions/SESSIONS.md`
@@ -82,6 +84,8 @@
 - `instructions/COMMENTS.md`
 - `instructions/HARNESS_PORTABILITY.md`
 - `instructions/RESEARCH.md`
+- `instructions/REPOSITORY.md`
+  - 대상 프로젝트에는 `instructions/templates/REPOSITORY-TEMPLATE.md`를 source로 사용한 템플릿 버전을 배치한다.
 - `instructions/templates/*`
 - `sessions/*`
 - `.agents/skills/harness-engine/*`
@@ -120,9 +124,11 @@
 ### v1 관리 대상
 
 - 루트 `AGENTS.md`
+  - 동기화 시 실제 source 저장소의 루트 문서를 그대로 복사하지 않고 `instructions/templates/AGENTS-TEMPLATE.md` 템플릿으로 override한다.
 - 루트 `CLAUDE.md`
 - `sessions/*`
 - `instructions/*.md`
+  - `instructions/REPOSITORY.md`는 `instructions/templates/REPOSITORY-TEMPLATE.md` 템플릿으로 override한다.
 - `instructions/templates/*`
 - `.agents/skills/harness-engine/*`
 
@@ -148,6 +154,7 @@
 - source에서 사라진 관리 대상 파일은 manifest 기준으로만 제거한다.
 - `.agents` 아래에서는 `harness-engine` 경로만 갱신한다.
 - 대상 프로젝트에 이미 있던 다른 `.agents` 자산은 유지한다.
+- 대상 프로젝트의 루트 `AGENTS.md`와 `instructions/REPOSITORY.md`는 템플릿 override 규칙을 우선 적용한다.
 
 ## Change Request Packet
 

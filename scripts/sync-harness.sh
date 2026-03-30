@@ -7,6 +7,8 @@ TARGET_DIR=""
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 SOURCE_DIR="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
+TEMPLATE_AGENTS_SOURCE="instructions/templates/AGENTS-TEMPLATE.md"
+TEMPLATE_REPOSITORY_SOURCE="instructions/templates/REPOSITORY-TEMPLATE.md"
 
 usage() {
   cat <<'EOF'
@@ -17,10 +19,10 @@ usage() {
   현재 저장소의 하네스 자산을 다른 프로젝트에 설치하거나 업데이트합니다.
 
 관리 대상:
-  - AGENTS.md
+  - AGENTS.md (대상 프로젝트에서는 template override 적용)
   - CLAUDE.md
   - sessions/*
-  - instructions/*.md
+  - instructions/*.md (instructions/REPOSITORY.md는 template override 적용)
   - instructions/templates/*
   - .agents/skills/harness-engine/*
 
@@ -53,6 +55,8 @@ ensure_source_layout() {
   [ -d "$SOURCE_DIR" ] || fail "source 디렉터리가 없습니다: $SOURCE_DIR"
   [ -f "$SOURCE_DIR/AGENTS.md" ] || fail "source에 AGENTS.md가 없습니다: $SOURCE_DIR"
   [ -d "$SOURCE_DIR/instructions" ] || fail "source에 instructions 디렉터리가 없습니다: $SOURCE_DIR"
+  [ -f "$SOURCE_DIR/$TEMPLATE_AGENTS_SOURCE" ] || fail "source에 AGENTS 템플릿이 없습니다: $SOURCE_DIR/$TEMPLATE_AGENTS_SOURCE"
+  [ -f "$SOURCE_DIR/$TEMPLATE_REPOSITORY_SOURCE" ] || fail "source에 REPOSITORY 템플릿이 없습니다: $SOURCE_DIR/$TEMPLATE_REPOSITORY_SOURCE"
 }
 
 collect_source_paths() {
@@ -170,6 +174,41 @@ sync_path() {
   log_action "UPDATE" "$rel_path"
   if [ "$DRY_RUN" -eq 0 ]; then
     ensure_parent_dir "$rel_path"
+    cp "$src" "$dst"
+    set_file_mode "$src" "$dst"
+  fi
+}
+
+sync_override() {
+  src_rel_path="$1"
+  dst_rel_path="$2"
+  src="$SOURCE_DIR/$src_rel_path"
+  dst="$TARGET_DIR/$dst_rel_path"
+
+  [ -f "$src" ] || fail "override source 파일이 없습니다: $src"
+
+  if [ -d "$dst" ]; then
+    fail "대상 경로가 디렉터리라서 파일을 덮어쓸 수 없습니다: $dst"
+  fi
+
+  if [ ! -e "$dst" ]; then
+    log_action "CREATE" "$dst_rel_path"
+    if [ "$DRY_RUN" -eq 0 ]; then
+      ensure_parent_dir "$dst_rel_path"
+      cp "$src" "$dst"
+      set_file_mode "$src" "$dst"
+    fi
+    return 0
+  fi
+
+  if cmp -s "$src" "$dst"; then
+    log_action "KEEP" "$dst_rel_path"
+    return 0
+  fi
+
+  log_action "UPDATE" "$dst_rel_path"
+  if [ "$DRY_RUN" -eq 0 ]; then
+    ensure_parent_dir "$dst_rel_path"
     cp "$src" "$dst"
     set_file_mode "$src" "$dst"
   fi
@@ -316,8 +355,14 @@ done
 
 printf '%s\n' "$CURRENT_PATHS" | while IFS= read -r rel_path; do
   [ -n "$rel_path" ] || continue
+  if [ "$rel_path" = "AGENTS.md" ] || [ "$rel_path" = "instructions/REPOSITORY.md" ]; then
+    continue
+  fi
   sync_path "$rel_path"
 done
+
+sync_override "$TEMPLATE_AGENTS_SOURCE" "AGENTS.md"
+sync_override "$TEMPLATE_REPOSITORY_SOURCE" "instructions/REPOSITORY.md"
 
 write_manifest "$CURRENT_PATHS" "$CURRENT_DIRECTORIES"
 
