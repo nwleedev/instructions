@@ -9,6 +9,7 @@
 본 에이전트로부터 다음 정보를 전달받는다.
 
 - `task_type`: 판정된 작업 분야
+- `execution_path`: `project-harness generation` 또는 `engine-asset bootstrap`
 - `common_research_path`: 공통 조사 phase 문서 경로
 - `adapter_path`: 어댑터 파일 경로 (또는 "bootstrap 보충 모드" 표시)
 - `example_pack_path`: paired example pack 경로 (또는 "없음")
@@ -18,6 +19,9 @@
 - `user_decisions`: 사용자가 확정한 선택 사항 (bootstrap 검증 결과 포함)
 - `existing_harness_path`: 기존 하네스가 있으면 해당 경로 (보강 모드 시)
 - `session_path`: 세션 디렉터리 경로 (조사 근거를 RESEARCH.md에 기록하기 위함)
+- `stack`: 스택 정보 (또는 "해당 없음")
+- `stack_reference_path`: stack reference 문서 경로 (또는 "없음")
+- `stack_required_checks`: stack doc에서 추린 필수 확인 항목 (또는 "없음")
 
 ## 실행 절차
 
@@ -43,6 +47,8 @@
 
 bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contract`(사용자 검증 완료)를 기준으로 사용한다.
 
+대표 분류에 adapter가 없어서 `execution_path`가 `engine-asset bootstrap`인 경우에는, 본 에이전트가 전달한 `coverage_contract`와 `user_decisions`를 어댑터 초안의 기준으로 사용하고 같은 턴에 adapter/example/stack 자산까지 만든다.
+
 ### 3. 기존 하네스 확인
 
 `existing_harness_path`가 있으면 기존 하네스를 읽고, 부족한 섹션을 파악한다. 덮어쓰지 않고 보강 방향을 잡는다.
@@ -56,8 +62,18 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 예시의 문체나 구조를 참고할 수는 있지만, 프로젝트 스택과 무관한 내용을 그대로 복사하지 않는다.
 - 현재 저장소 전용 사례는 portable core가 아니라 예시로만 취급한다.
 - 정식 adapter가 있는데 example pack이 없으면 미충족 항목으로 보고한다.
+- example pack은 품질 보강용 few-shot reference이지 최소 계약의 진실원천이 아니다. 계약 판단은 common phase와 adapter 기준을 우선한다.
 
-### 5. 이식성 패키징 판정
+### 5. stack reference 확인
+
+`stack_reference_path`가 있으면 해당 문서를 읽고 `stack_required_checks`를 산출물에 반영한다.
+
+규칙:
+- stack이 감지된 경우 `ARCHITECTURE.md`, `ANTI_PATTERNS.md`, `VALIDATION.md`에 stack-specific 규칙이 보여야 한다.
+- stack doc가 없는데 `execution_path`가 `engine-asset bootstrap`이면 필요한 stack doc까지 함께 생성한다.
+- stack doc가 없는데 `execution_path`가 `project-harness generation`이면, 현재 대상 프로젝트 하네스에 필요한 규칙만 반영하고 engine 자산 부재를 미충족 항목으로 보고한다.
+
+### 6. 이식성 패키징 판정
 
 추가하려는 내용을 아래 셋 중 어디에 둘지 먼저 판정한다.
 
@@ -70,7 +86,7 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 현재 저장소의 예시, 절대경로, 과거 실패 이력을 코어 규칙으로 쓰지 않는다.
 - 코어 문서에 로컬 연결부가 꼭 필요하면 템플릿 또는 “프로젝트에서 채워야 하는 항목” 형태로만 남긴다.
 
-### 6. 도메인 조사
+### 7. 도메인 조사
 
 공통 research phase와 어댑터의 1차 근거 소스 규칙을 함께 적용해 조사를 수행한다. 어댑터에 1차 근거 소스가 정의되어 있지 않으면 공통 research phase의 범용 순서를 따른다.
 
@@ -109,7 +125,7 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 지시: "[도메인]에 대해 핵심 작업 축(최소 6개), 실패 모드(최소 5개), 권위 있는 1차 근거 소스, 전문가가 사용하는 품질 기준, Anti/Good 쌍에 쓸 수 있는 구체적 사례를 조사해주세요."
 - 출력: Coverage 보충 정보 + 근거 소스 + 사례
 
-### 7. Anti/Good 쌍 작성
+### 8. Anti/Good 쌍 작성
 
 어댑터의 필수 쌍 목록에 있는 모든 케이스에 대해 Anti와 Good을 **반드시 쌍으로** 작성한다.
 
@@ -121,13 +137,13 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 어댑터 필수 쌍 외에 도메인 조사에서 발견한 추가 쌍도 작성한다.
 - example pack에 이미 강한 직접 예시가 있다면, 거기서 패턴의 강도와 서술 밀도를 참고한다.
 
-### 8. 산출물 작성
+### 9. 산출물 작성
 
 `instructions/<task_type>/*.md`에 하네스 문서를 작성하거나 보강한다.
 
 `references/OUTPUT_CONTRACT.md`의 산출물 규칙을 따른다.
 
-현재 작업 범위가 harness-engine 자체의 재사용 자산 보강이라면, 아래 경로도 함께 생성/수정할 수 있다.
+현재 작업 범위가 `engine-asset bootstrap`이거나 harness-engine 자체의 재사용 자산 보강이라면, 아래 경로도 함께 생성/수정할 수 있다.
 
 - `references/adapters/<task_type>.md`
 - `references/examples/<task_type>/README.md`
@@ -151,8 +167,9 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 출처와 설계 근거가 어디에 있는가
 - 프로젝트 전용 연결부를 어디에 두어야 하는가
 - 현재 저장소 전용 예시를 코어 규칙으로 오해하지 않게 설명하는가
+- stack이 있다면 해당 stack-specific 규칙과 검증 포인트가 보이는가
 
-### 9. 조사 근거 기록
+### 10. 조사 근거 기록
 
 조사한 근거를 세션 `RESEARCH.md`에 기록한다. `session_path`의 RESEARCH.md에 항목을 추가한다.
 
@@ -161,13 +178,15 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 서브에이전트 완료 시 다음 정보를 본 에이전트에 반환한다.
 
 1. **생성/수정된 파일 목록**: 경로와 각 파일의 역할
-2. **조사 근거 요약**: 사용한 1차 근거 소스와 핵심 발견
-3. **Coverage 충족 상태**: 어댑터 필수 축별 충족 여부
-4. **Anti/Good 쌍 충족 상태**: 어댑터 필수 쌍별 완성 여부
-5. **Paired example pack 사용 상태**: 어떤 example pack을 읽었고 무엇을 참고했는지
-6. **공통 phase 사용 상태**: common research phase와 bootstrap phase를 어떻게 적용했는지
-7. **미충족 항목**: 조사나 작성에서 충족하지 못한 항목 (있으면)
-8. **도메인 탐색 서브에이전트 실행 여부**: 실행했으면 탐색 결과 요약
+2. **실행 경로**: `project-harness generation` 또는 `engine-asset bootstrap`
+3. **조사 근거 요약**: 사용한 1차 근거 소스와 핵심 발견
+4. **Coverage 충족 상태**: 어댑터 필수 축별 충족 여부
+5. **Anti/Good 쌍 충족 상태**: 어댑터 필수 쌍별 완성 여부
+6. **Paired example pack 사용 상태**: 어떤 example pack을 읽었고 무엇을 참고했는지
+7. **Stack 반영 상태**: stack reference 사용 여부와 반영한 규칙
+8. **공통 phase 사용 상태**: common research phase와 bootstrap phase를 어떻게 적용했는지
+9. **미충족 항목**: 조사나 작성에서 충족하지 못한 항목 (있으면)
+10. **도메인 탐색 서브에이전트 실행 여부**: 실행했으면 탐색 결과 요약
 
 ## 금지
 

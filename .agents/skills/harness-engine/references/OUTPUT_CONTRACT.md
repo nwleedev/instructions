@@ -16,6 +16,19 @@
 - validation artifact 템플릿: `instructions/templates/HARNESS-VALIDATION-REPORT-TEMPLATE.md`
 - 새 `task_type` 생성 시 discovery용 루트 진입점으로 `AGENTS.md`와 `instructions/INDEX.md`를 함께 갱신
 
+## 실행 경로 규칙
+
+`harness-engine`의 생성 작업은 아래 둘 중 하나로 분류한다.
+
+1. `project-harness generation`
+   - 대상 프로젝트의 `instructions/<task_type>/*.md`를 생성/보강하는 일반 경로
+   - 기존 adapter가 있거나, 비대표 분류/미지 도메인에 대해 로컬 하네스만 우선 세팅할 때 사용
+2. `engine-asset bootstrap`
+   - 대표 분류에 adapter가 없을 때, 엔진 자산과 대상 프로젝트 하네스를 한 번에 닫는 경로
+   - `instructions/<task_type>/*.md`와 함께 adapter, paired example pack, 필요 시 stack doc까지 생성한다
+
+대표 분류인데 adapter가 없는 경우에는 일반 경로로 처리하지 않는다.
+
 ## 이식성 패키징 규칙
 
 하네스 산출물은 가능한 한 아래 3층을 구분한다.
@@ -117,16 +130,17 @@
 - 하네스 생성 시 해당 도메인 어댑터의 Coverage Contract 필수 축이 모두 산출물에 반영되어야 한다.
 - 어댑터가 정의한 1차 근거 소스를 산출물의 출처 체계에 반영한다.
 - 정식 adapter가 있다면 paired example pack도 함께 확인한다.
-- 어댑터 없이 하네스를 생성한 경우, 하네스 완성 후 어댑터 파일과 paired example pack을 함께 생성하여 재사용 가능하게 한다.
+- 대표 분류인데 adapter가 없다면 `engine-asset bootstrap` 경로로 전환해 어댑터 파일과 paired example pack, 필요 시 stack doc까지 함께 생성한다.
+- stack이 감지되면 stack reference를 생성/검증 입력에 포함하고, 산출물의 구조/안티패턴/검증 규칙에 반영한다.
 
 ## 서브에이전트 산출물 규칙
 
-- 일반적인 하네스 생성 서브에이전트는 `instructions/<task_type>/*.md` 파일을 생성/수정한다.
-- 현재 작업이 harness-engine 자체의 재사용 자산 보강이라면 `references/adapters/<task_type>.md`, `references/examples/<task_type>/*`, `references/stacks/<stack>.md`, `references/common/*.md`도 생성/수정할 수 있다.
+- `project-harness generation` 경로의 서브에이전트는 `instructions/<task_type>/*.md` 파일을 생성/수정한다.
+- `engine-asset bootstrap` 경로이거나 현재 작업이 harness-engine 자체의 재사용 자산 보강이라면 `references/adapters/<task_type>.md`, `references/examples/<task_type>/*`, `references/stacks/<stack>.md`, `references/common/*.md`도 생성/수정할 수 있다.
 - 세션 파일(TICKETS.md, PROGRESS.md, DECISIONS.md)은 서브에이전트가 갱신하지 않는다 (본 에이전트 책임).
 - AGENTS.md, instructions/INDEX.md는 서브에이전트가 갱신하지 않는다 (본 에이전트 책임).
 - worktree 격리 사용 시, 산출물은 worktree 내 `instructions/<task_type>/` 경로에 생성된다.
-- 서브에이전트는 완료 시 생성/수정 파일 목록, Coverage 충족 상태, Anti/Good 쌍 충족 상태, paired example pack 상태, 미충족 항목을 보고한다.
+- 서브에이전트는 완료 시 생성/수정 파일 목록, 실행 경로, Coverage 충족 상태, Anti/Good 쌍 충족 상태, paired example pack 상태, stack 반영 상태, 미충족 항목을 보고한다.
 
 ## 환류 패킷 규칙
 
@@ -155,3 +169,4 @@
 - 실제 프로젝트에서 하네스 계층 문제가 발생했을 때 즉시 구조화 리포트를 남긴다.
 - upstream change request packet으로 압축하기 전의 로컬 원본 기록 역할을 한다.
 - validation report 템플릿은 하네스 검증 통과 여부와 구현 시작 허용 여부를 세션 산출물로 남기는 역할을 한다.
+- validation artifact에는 이번 실행이 `project-harness generation`인지 `engine-asset bootstrap`인지도 남긴다.
