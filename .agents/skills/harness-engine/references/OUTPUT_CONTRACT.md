@@ -9,7 +9,10 @@
 - 최종 산출물: `instructions/<task_type>/*.md`
 - 임시 메모: `store/<session_id>/temps/*`
 - 스킬 자체 보강 지침: `.agents/skills/harness-engine/**`
+- 공통 phase 문서: `.agents/skills/harness-engine/references/common/*.md`
+- task adapter: `.agents/skills/harness-engine/references/adapters/<task_type>.md`
 - 스킬 내부 reference example: `.agents/skills/harness-engine/references/examples/<task_type>/*`
+- 스택 분기 지침: `.agents/skills/harness-engine/references/stacks/<stack>.md`
 - validation artifact 템플릿: `instructions/templates/HARNESS-VALIDATION-REPORT-TEMPLATE.md`
 - 새 `task_type` 생성 시 discovery용 루트 진입점으로 `AGENTS.md`와 `instructions/INDEX.md`를 함께 갱신
 
@@ -54,6 +57,13 @@
 - 테스트 전용 문서
 - 도메인별 세부 문서
 
+정식 adapter를 만들거나 크게 보강할 때 추가:
+
+- `references/adapters/<task_type>.md`
+- `references/examples/<task_type>/README.md`
+- `references/examples/<task_type>/ANTI_GOOD_REFERENCE.md`
+- `references/examples/<task_type>/VALIDATION_REFERENCE.md`
+
 ## 각 문서의 역할
 
 - `INDEX.md`
@@ -85,6 +95,14 @@
 - 어댑터 필수 쌍 외에 프로젝트 고유 쌍을 추가할 수 있다.
 - 각 쌍에는 케이스명을 명시하여 Anti와 Good의 대응 관계가 명확해야 한다.
 
+## Paired Example Pack 규칙
+
+- 정식 task adapter는 paired example pack과 함께 유지한다.
+- 최소 구성은 `README.md`, `ANTI_GOOD_REFERENCE.md`, `VALIDATION_REFERENCE.md`다.
+- example pack은 adapter의 규범 계약을 대체하지 않는다.
+- example pack이 없으면 정식 adapter 완료 상태로 보지 않는다.
+- example pack은 engine-internal reference 자산이며, 대상 프로젝트 runtime 문서로 sync하지 않는다.
+
 출처: OpenAI GPT-5 Prompting Guide (XML-Tagged Instruction Blocks) + Addyosmani 3-Tier Boundary System
 
 ## 예시 코드 규칙
@@ -95,17 +113,20 @@
 
 ## 어댑터 연동 규칙
 
+- 모든 하네스 생성은 먼저 공통 `research` phase를 적용한다.
 - 하네스 생성 시 해당 도메인 어댑터의 Coverage Contract 필수 축이 모두 산출물에 반영되어야 한다.
 - 어댑터가 정의한 1차 근거 소스를 산출물의 출처 체계에 반영한다.
-- 어댑터 없이 하네스를 생성한 경우, 하네스 완성 후 어댑터 파일도 함께 생성하여 재사용 가능하게 한다.
+- 정식 adapter가 있다면 paired example pack도 함께 확인한다.
+- 어댑터 없이 하네스를 생성한 경우, 하네스 완성 후 어댑터 파일과 paired example pack을 함께 생성하여 재사용 가능하게 한다.
 
 ## 서브에이전트 산출물 규칙
 
-- 하네스 생성 서브에이전트는 `instructions/<task_type>/*.md` 파일만 생성/수정한다.
+- 일반적인 하네스 생성 서브에이전트는 `instructions/<task_type>/*.md` 파일을 생성/수정한다.
+- 현재 작업이 harness-engine 자체의 재사용 자산 보강이라면 `references/adapters/<task_type>.md`, `references/examples/<task_type>/*`, `references/stacks/<stack>.md`, `references/common/*.md`도 생성/수정할 수 있다.
 - 세션 파일(TICKETS.md, PROGRESS.md, DECISIONS.md)은 서브에이전트가 갱신하지 않는다 (본 에이전트 책임).
 - AGENTS.md, instructions/INDEX.md는 서브에이전트가 갱신하지 않는다 (본 에이전트 책임).
 - worktree 격리 사용 시, 산출물은 worktree 내 `instructions/<task_type>/` 경로에 생성된다.
-- 서브에이전트는 완료 시 생성/수정 파일 목록, Coverage 충족 상태, Anti/Good 쌍 충족 상태, 미충족 항목을 보고한다.
+- 서브에이전트는 완료 시 생성/수정 파일 목록, Coverage 충족 상태, Anti/Good 쌍 충족 상태, paired example pack 상태, 미충족 항목을 보고한다.
 
 ## 환류 패킷 규칙
 

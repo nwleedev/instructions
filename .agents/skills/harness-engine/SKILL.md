@@ -25,13 +25,14 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 4. 기존 하네스가 있으면 최소 계약 충족 여부를 먼저 판정한다.
 5. 최소 계약 미달이면 기존 하네스를 재사용하지 말고 보강 모드로 전환한다.
 6. 산출물을 `portable core`, `project adapter`, `local evidence pack` 중 어디에 둘지 먼저 판정한다.
-7. 도메인 어댑터를 로드하고 Coverage 갭 체크를 수행한다.
-8. Coverage 갭 또는 bootstrap이 필요하면 사용자 검증을 수행한다 (human-in-the-loop).
-9. **하네스 생성 서브에이전트를 실행한다.**
-10. **검증 서브에이전트를 실행한다.**
-11. 검증 결과를 확인하고, 보강이 필요하면 9~10을 반복한다.
-12. 새 `task_type`를 만들었다면 `AGENTS.md`와 `instructions/INDEX.md`를 갱신한다.
-13. 세션 기록(TICKETS.md, PROGRESS.md, DECISIONS.md)을 갱신한다.
+7. 공통 `research` phase를 먼저 수행한다.
+8. 도메인 task adapter와 paired example pack을 로드하고 Coverage 갭 체크를 수행한다.
+9. Coverage 갭 또는 bootstrap이 필요하면 공통 bootstrap phase와 사용자 검증을 수행한다 (human-in-the-loop).
+10. **하네스 생성 서브에이전트를 실행한다.**
+11. **검증 서브에이전트를 실행한다.**
+12. 검증 결과를 확인하고, 보강이 필요하면 10~11을 반복한다.
+13. 새 `task_type`를 만들었다면 `AGENTS.md`와 `instructions/INDEX.md`를 갱신한다.
+14. 세션 기록(TICKETS.md, PROGRESS.md, DECISIONS.md)을 갱신한다.
 
 ## 작업 시작 전 확인
 
@@ -43,7 +44,9 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 - 이미 있는 하네스가 있다면 우선 읽고, 덮어쓰지 말고 보강 방향을 잡는다.
 - 다른 프로젝트에서 core만 sync한 상태라면, 이 스킬이 해당 프로젝트의 첫 로컬 작업 분야 하네스를 만드는 공식 경로임을 전제로 한다.
 - 사용자가 해당 도메인에 익숙하지 않다고 명시했다면, `learning-mode`를 병행 적용할지 먼저 판정한다.
-- `references/examples/<task_type>/`가 있으면 참고용 evidence로만 읽고, portable core 규칙처럼 복사하지 않는다.
+- 모든 실행은 `references/common/RESEARCH_PHASE.md`를 먼저 적용한다.
+- 정식 task adapter가 있다면 `references/examples/<task_type>/`도 함께 있어야 한다. 예시 팩이 없으면 정식 adapter 완료 상태로 보지 않는다.
+- `references/examples/<task_type>/`는 참고용 evidence로만 읽고, portable core 규칙처럼 복사하지 않는다.
 - 기존 하네스가 있더라도 아래 최소 계약을 충족하지 못하면 `재사용 가능`으로 판정하지 않는다.
   - `INDEX/ARCHITECTURE/ANTI_PATTERNS/VALIDATION` 묶음 존재
   - 작업 분야에 맞는 직접 예시 코드 또는 직접 사례 존재
@@ -63,9 +66,9 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 
 실질적인 후보가 2개 이상이면 자동 확정하지 말고 사용자에게 선택지를 제시하고 대기한다.
 
-## 도메인 어댑터 로드 + Coverage 갭 체크
+## 공통 research phase + 도메인 어댑터 로드 + Coverage 갭 체크
 
-`task_type` 판정 후, 기존 하네스의 품질을 먼저 판정하고 해당 도메인의 어댑터를 로드한다.
+`task_type` 판정 후, 기존 하네스의 품질을 먼저 판정하고 공통 `research` phase를 수행한 뒤 해당 도메인의 task adapter를 로드한다.
 
 ### 기존 하네스 품질 판정
 
@@ -78,9 +81,31 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 
 위 항목 중 하나라도 아니면, 기존 하네스는 `존재하지만 재사용 불가`로 판정하고 보강 모드로 전환한다.
 
+### 공통 research phase
+
+모든 `task_type`는 먼저 `references/common/RESEARCH_PHASE.md`를 적용한다.
+
+이 단계에서 최소한 다음을 닫는다.
+
+- 1차 근거 소스 우선순위
+- 최신성 확인
+- 실패 모드 또는 제한 사항
+- Anti/Good 직접 사례 후보
+- 검색 실행 안전 규칙
+
+`research`가 최종 `task_type`이어도 이 phase를 먼저 수행하고, 그 다음 `references/adapters/research.md`를 추가 적용한다.
+
 ### 어댑터가 있는 경우
 
 `references/adapters/<task_type>.md`가 존재하면 로드한다.
+
+정식 adapter가 있으면 `references/examples/<task_type>/`도 함께 확인한다.
+
+- `README.md`
+- `ANTI_GOOD_REFERENCE.md`
+- `VALIDATION_REFERENCE.md`
+
+위 3개가 없으면 adapter는 `존재하지만 paired example pack 미완성`으로 판정한다.
 
 어댑터 로드 후, **Coverage 갭 체크**를 수행한다. 다음 중 **2개 이상** 해당하면 bootstrap 보충을 실행한다.
 
@@ -91,7 +116,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 
 ### bootstrap 보충 (Coverage 갭 감지 시)
 
-`references/adapters/bootstrap.md`를 **보충 모드**로 실행한다. 본 에이전트가 사용자 검증(human-in-the-loop)을 수행하고, 확정된 Coverage Contract를 서브에이전트에 전달한다.
+`references/common/BOOTSTRAP_PHASE.md`를 **보충 모드**로 실행한다. 본 에이전트가 사용자 검증(human-in-the-loop)을 수행하고, 확정된 Coverage Contract를 서브에이전트에 전달한다.
 
 ### 공식 MCP 권장안 (선택)
 
@@ -102,7 +127,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 ### 어댑터가 없는 경우
 
 1. **대표 분류 집합에 해당하지만 어댑터가 아직 없는 경우**: Coverage Contract 초안을 직접 구성하고 서브에이전트에 전달한다.
-2. **미지 도메인인 경우**: `references/adapters/bootstrap.md`를 신규 모드로 실행한다. 본 에이전트가 Role-Goal-Backstory 정의와 사용자 검증을 수행한 뒤, 확정된 내용을 서브에이전트에 전달한다.
+2. **미지 도메인인 경우**: `references/common/BOOTSTRAP_PHASE.md`를 신규 모드로 실행한다. 본 에이전트가 Role-Goal-Backstory 정의와 사용자 검증을 수행한 뒤, 확정된 내용을 서브에이전트에 전달한다.
 
 ### 스택 분기 (해당 시)
 
@@ -153,7 +178,11 @@ Agent tool 호출:
 
 작업 정보:
 - task_type: {task_type}
+- common_research_path: {.agents/skills/harness-engine/references/common/RESEARCH_PHASE.md}
 - adapter_path: {adapter_path}
+- example_pack_path: {references/examples/<task_type>/ 또는 "없음"}
+- bootstrap_phase_path: {공통 bootstrap phase 경로 또는 "해당 없음"}
+- bootstrap_mode: {new/supplement/none}
 - coverage_contract: {coverage_contract 내용}
 - user_decisions: {사용자 확정 사항}
 - existing_harness_path: {기존 하네스 경로 또는 "없음"}
@@ -168,6 +197,7 @@ Agent tool 호출:
 - 조사 근거 요약
 - Coverage 충족 상태
 - Anti/Good 쌍 충족 상태
+- paired example pack 사용 상태
 - 미충족 항목
 - worktree_path (worktree 격리 사용 시)
 
@@ -194,11 +224,15 @@ Agent tool 호출:
 
 하네스 경로: {worktree_path}/instructions/{task_type}/
 검증 기준: .agents/skills/harness-engine/references/VALIDATION.md
+공통 research phase: {.agents/skills/harness-engine/references/common/RESEARCH_PHASE.md}
+task adapter: {adapter_path 또는 "없음"}
+example pack: {example_pack_path 또는 "없음"}
+bootstrap phase: {bootstrap_phase_path 또는 "해당 없음"}
 
 검증 방법:
-1. 하네스 문서만 읽고, 다음 가상 작업을 수행해보세요: {가상 작업 시나리오}
+1. 하네스 문서와 관련 engine reference만 읽고, 다음 가상 작업을 수행해보세요: {가상 작업 시나리오}
 2. 하네스에서 빠진 정보, 모호한 지시, 충돌하는 규칙을 보고해주세요.
-3. VALIDATION.md의 최소 체크리스트를 항목별로 통과 여부를 판정해주세요.
+3. VALIDATION.md의 최소 체크리스트와 adapter/example pair 체크를 항목별로 통과 여부 판정해주세요.
 
 보고 형식:
 - 누락 항목: [목록]
@@ -226,6 +260,7 @@ Agent tool 호출:
 - AGENTS.md, instructions/INDEX.md: 새 task_type 생성 시 discovery 등록
 - 다른 프로젝트 환류 요청이 있으면 change request packet의 핵심 필드를 DECISIONS 또는 RESEARCH에 남긴다.
 - 실제 프로젝트에서 수집한 보고서가 있으면 원문 전체 대신 핵심 필드만 추려 upstream 판단 자료로 사용한다.
+- 정식 adapter를 추가하거나 크게 보강했다면 paired example pack도 같은 턴에 점검한다.
 
 ## 기존 하네스 재사용 원칙
 
@@ -243,6 +278,7 @@ Agent tool 호출:
 - 서브에이전트에 사용자 확정 전의 미결 사항을 전달하기
 - 검증 서브에이전트를 생략하기
 - 최소 계약 미달 기존 하네스를 그대로 재사용하기
+- 정식 adapter가 있는데 paired example pack 없이 완료 처리하기
 - 검증 결과가 `통과`가 아닌데 구현 티켓을 시작하기
 - Anti/Good 쌍의 한쪽만 작성하고 완료로 처리하기
 - 최종 문서에 출처를 남기지 않고 `RESEARCH.md`에만 근거를 두기
@@ -255,6 +291,8 @@ Agent tool 호출:
 - 생성 지침 (서브에이전트용): `references/GENERATION.md`
 - 산출물 기준: `references/OUTPUT_CONTRACT.md`
 - 검증 기준: `references/VALIDATION.md`
+- 공통 조사 phase: `references/common/RESEARCH_PHASE.md`
 - 도메인 어댑터: `references/adapters/<task_type>.md`
+- 공통 bootstrap phase: `references/common/BOOTSTRAP_PHASE.md`
 - 스택별 지침: `references/stacks/<stack>.md`
-- 미지 도메인 시작점: `references/adapters/bootstrap.md`
+- example pack: `references/examples/<task_type>/*`

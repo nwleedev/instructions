@@ -7,6 +7,7 @@
 ## 최소 체크리스트
 
 - `task_type` 판정 이유를 설명할 수 있다.
+- 공통 `research` phase를 적용했는지 설명할 수 있다.
 - 최종 산출물이 `instructions/<task_type>/*.md`에 있다.
 - 목적, 흐름, 금지 패턴, 완료 기준이 분리되어 있다.
 - 기존 하네스가 있었다면 왜 보강만 했는지 또는 왜 새 하네스를 만들었는지 설명할 수 있다.
@@ -16,6 +17,9 @@
 - 최종 문서들에 출처와 설계 근거가 직접 들어 있다.
 - 대표 분류 집합으로 처리했는지, 예외적 새 `task_type`인지 설명할 수 있다.
 - discovery 등록 형식이 현재 `AGENTS.md`의 텍스트 포맷과 어긋나지 않는다.
+- 정식 adapter가 있다면 paired example pack이 존재한다.
+- paired example pack이 있다면 `README.md`, `ANTI_GOOD_REFERENCE.md`, `VALIDATION_REFERENCE.md` 최소 구성을 갖춘다.
+- adapter의 필수 Anti/Good 쌍과 example pack의 대표 예시가 크게 어긋나지 않는다.
 - 현재 저장소 전용 예시/경로/검증 이력이 코어 규칙과 분리되어 있다.
 - validation artifact의 저장 위치와 최소 형식을 설명할 수 있다.
 
@@ -32,10 +36,11 @@
 ### 검증 절차
 
 1. 생성된 `instructions/<task_type>/*.md` 파일을 읽는다.
-2. 아래 "질문" 항목에 대해 하네스만으로 답할 수 있는지 확인한다.
-3. 어댑터 연동 검증 항목을 확인한다.
-4. 가상 작업을 시도하고, 하네스에서 빠진 정보를 파악한다.
-5. 결과를 보고 형식으로 반환한다.
+2. 공통 `research` phase, task adapter, paired example pack이 제공되었다면 함께 읽는다.
+3. 아래 "질문" 항목에 대해 하네스와 관련 reference만으로 답할 수 있는지 확인한다.
+4. 어댑터 연동 검증 항목을 확인한다.
+5. 가상 작업을 시도하고, 하네스에서 빠진 정보를 파악한다.
+6. 결과를 보고 형식으로 반환한다.
 
 ### 보고 형식
 
@@ -77,6 +82,9 @@
 - 어댑터 드라이런의 Positive Case에서 하네스가 올바른 방향을 안내하는가
 - 어댑터 드라이런의 Negative Case에서 하네스가 해당 패턴을 차단하는가
 - 어댑터가 정의한 1차 근거 소스가 산출물의 출처 체계에 반영되었는가
+- paired example pack이 존재하는가
+- paired example pack 최소 3문서가 모두 존재하는가
+- example pack이 adapter 계약과 충돌하지 않는가
 - 코어 규칙과 project adapter / local evidence가 뒤섞이지 않았는가
 
 bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확인한다.
@@ -89,6 +97,7 @@ bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확
 ## 실패 신호
 
 - 문서가 있는데 적용 시점이 불명확하다.
+- 공통 `research` phase를 거치지 않고 task adapter만 적용했다.
 - 기존 하네스가 있으나 최소 계약 미달인데도 재사용 결정이 내려졌다.
 - 안티패턴만 있고 권장 흐름이 없다.
 - 권장 흐름만 있고 검증 기준이 없다.
@@ -99,7 +108,9 @@ bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확
 - `AGENTS.md` 등록 형식이 현재 문서의 섹션형 서술 포맷과 크게 어긋난다.
 - **어댑터 Coverage Contract 필수 축이 하네스에 누락되어 있다.**
 - **어댑터 Anti/Good 필수 쌍의 한쪽(Anti만 또는 Good만)이 빠져 있다.**
-- **어댑터 없이 하네스를 생성한 뒤 어댑터를 함께 생성하지 않았다.**
+- **정식 adapter가 있는데 paired example pack이 없다.**
+- **paired example pack 최소 구성이 깨져 있다.**
+- **어댑터 없이 하네스를 생성한 뒤 어댑터와 paired example pack을 함께 생성하지 않았다.**
 - 검증 결과가 `통과`가 아닌데 구현 티켓이 시작되었다.
 - validation artifact가 저장되지 않았는데 구현 티켓이 시작되었다.
 - 테스트 전략이 구현 후 테스트 정합화로 밀렸는데도 하네스가 차단하지 못했다.

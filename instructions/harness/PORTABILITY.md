@@ -25,6 +25,7 @@
 - 공통 세션 규칙
 - 실패 대응 원칙
 - 하네스 생성 도구와 공통 템플릿 (`harness-engine`, `instructions/templates/*`)
+- `harness-engine` 내부의 공통 phase 문서, task adapter, paired example pack, stack reference
 
 규칙:
 
@@ -141,6 +142,7 @@
   - `instructions/REPOSITORY.md`는 `instructions/templates/REPOSITORY-TEMPLATE.md` 템플릿으로 override한다.
 - `instructions/templates/*`
 - `.agents/skills/harness-engine/*`
+  - 내부적으로는 `references/common/*`, `references/adapters/<task_type>.md`, `references/examples/<task_type>/*`, `references/stacks/*`를 함께 관리할 수 있다.
 
 ### v1 비관리 대상
 
