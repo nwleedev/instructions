@@ -15,6 +15,7 @@
 
 ## Stack
 
+- architecture_style:
 - framework:
 - router:
 - server_state_tool:

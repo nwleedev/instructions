@@ -6,6 +6,7 @@
 
 - 프론트엔드 하네스가 어느 정도의 직접 예시와 validation 강도를 가져야 하는지 보여준다.
 - `React`, `TanStack Query`, `React Hook Form` 같은 흔한 조합에서 어떤 Anti/Good 쌍이 필요한지 빠르게 떠올리게 한다.
+- Feature Sliced Design(FSD)을 채택한 프로젝트에서 public API, layer rule, cross-import가 어떤 밀도로 문서화되어야 하는지 보여준다.
 - thin frontend adapter와 project contract packet을 보조하는 few-shot reference 역할을 한다.
 
 규칙:
