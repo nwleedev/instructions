@@ -22,12 +22,13 @@ usage() {
   - AGENTS.md (대상 프로젝트에서는 template override 적용)
   - CLAUDE.md
   - sessions/*
-  - instructions/*.md (instructions/REPOSITORY.md는 template override 적용)
+  - instructions/*.md (top-level 문서만 관리, instructions/REPOSITORY.md는 template override 적용)
   - instructions/templates/*
   - .agents/skills/harness-engine/*
 
 비관리 대상:
   - store/*
+  - instructions/harness/*
   - instructions/research/*
   - instructions/frontend/*
   - instructions/learning-mode/*

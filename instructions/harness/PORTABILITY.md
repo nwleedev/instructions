@@ -1,5 +1,8 @@
 # 하네스 이식성과 환류
 
+이 문서는 원본 하네스 저장소에서만 유지하는 source-side 메타 문서다.
+대상 프로젝트 runtime instruction이 아니며, `scripts/sync-harness.sh`의 기본 sync 범위에도 포함하지 않는다.
+
 이 문서는 이 저장소의 하네스를 여러 프로젝트에 복사해 사용할 때,
 무엇을 그대로 유지하고 무엇을 프로젝트별로 분리해야 하는지,
 그리고 복사한 프로젝트에서 생긴 요구사항을 어떻게 원본 저장소로 되돌릴지 정의한다.
@@ -57,6 +60,13 @@
 - 다른 프로젝트에 통째로 복사하지 않는다.
 - 복사하더라도 참고용으로만 두고, 새 프로젝트에서 다시 검증한다.
 
+## Source-Side 메타 문서 경계
+
+- `instructions/harness/*`는 원본 저장소 유지보수용 메타 문서 경로다.
+- 이 경로는 `instructions/<task_type>/...` 로컬 작업 분야 하네스와 다르다.
+- 혼동을 줄이기 위해 `instructions/harness/INDEX.md`는 만들지 않는다.
+- 이 디렉터리의 문서는 대상 프로젝트에서 없어도 정상이다.
+
 ## 이 저장소의 repo-local 상세 하네스
 
 이 저장소의 아래 디렉터리는 portable core가 아니라 repo-local 상세 하네스 또는 예시 묶음이다.
@@ -82,7 +92,6 @@
 - `instructions/SESSIONS.md`
 - `instructions/FAILURE.md`
 - `instructions/COMMENTS.md`
-- `instructions/HARNESS_PORTABILITY.md`
 - `instructions/RESEARCH.md`
 - `instructions/REPOSITORY.md`
   - 대상 프로젝트에는 `instructions/templates/REPOSITORY-TEMPLATE.md`를 source로 사용한 템플릿 버전을 배치한다.
@@ -128,6 +137,7 @@
 - 루트 `CLAUDE.md`
 - `sessions/*`
 - `instructions/*.md`
+  - top-level 문서만 관리한다.
   - `instructions/REPOSITORY.md`는 `instructions/templates/REPOSITORY-TEMPLATE.md` 템플릿으로 override한다.
 - `instructions/templates/*`
 - `.agents/skills/harness-engine/*`
@@ -135,6 +145,7 @@
 ### v1 비관리 대상
 
 - `store/*`
+- `instructions/harness/*`
 - `instructions/research/*`
 - `instructions/frontend/*`
 - `instructions/learning-mode/*`

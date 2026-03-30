@@ -41,7 +41,7 @@
 
 - 여러 프로젝트에 복사할 규칙은 `portable core`, `project adapter`, `local evidence pack`으로 분리한다.
 - 프로젝트별 차이와 과거 증빙은 공통 코어 규칙으로 승격하지 않는다.
-- 복사 사용 중 생긴 문제를 원본 저장소로 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
+- 복사 사용 중 생긴 문제를 원본 저장소로 되돌릴 때는 원본 하네스 저장소의 source-side 메타 문서 `instructions/harness/PORTABILITY.md`의 change request packet 형식을 따른다.
 
 ## 하네스 문제 보고
 
@@ -49,7 +49,7 @@
 - 기본 템플릿은 `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`를 사용한다.
 - 기본 경로는 `store/<session_id>/temps/harness-issues/`이며, 세션 디렉터리가 없는 환경에서는 프로젝트의 `temps/harness-issues/`를 사용한다.
 - 보고서는 프롬프트 덤프가 아니라 재현 절차, 기대 동작, 영향 범위, 일반화 가능성을 포함한 구조화 리포트여야 한다.
-- 보고서 작성 후 현재 작업에 미치는 영향은 `PROGRESS.md`에 남기고, upstream 변경 후보는 `instructions/HARNESS_PORTABILITY.md`의 change request packet으로 승격한다.
+- 보고서 작성 후 현재 작업에 미치는 영향은 `PROGRESS.md`에 남기고, upstream 변경 후보는 원본 하네스 저장소의 `instructions/harness/PORTABILITY.md` change request packet으로 승격한다.
 
 ## 세션 기록 강행 규칙
 

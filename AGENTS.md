@@ -90,7 +90,7 @@ Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 
 
 - 여러 프로젝트로 복사해서 쓰는 하네스는 `portable core`, `project adapter`, `local evidence pack`을 분리해 관리한다.
 - 프로젝트마다 달라지는 경로, 검증 명령, 예시, 과거 증빙은 코어 규칙으로 승격하지 않는다.
-- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 `instructions/HARNESS_PORTABILITY.md`의 change request packet 형식을 따른다.
+- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 source-side 메타 문서인 `instructions/harness/PORTABILITY.md`의 change request packet 형식을 따른다.
 
 ## 하네스 문제 자동 보고
 
