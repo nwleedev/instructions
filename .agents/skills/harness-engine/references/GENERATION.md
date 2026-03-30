@@ -11,17 +11,19 @@
 - `task_type`: 판정된 작업 분야
 - `execution_path`: `project-harness generation` 또는 `engine-asset bootstrap`
 - `common_research_path`: 공통 조사 phase 문서 경로
-- `adapter_path`: 어댑터 파일 경로 (또는 "bootstrap 보충 모드" 표시)
-- `example_pack_path`: paired example pack 경로 (또는 "없음")
+- `adapter_path`: 어댑터 파일 경로 (또는 "없음")
+- `contract_packet_path`: 프로젝트별 contract packet 경로
+- `example_pack_path`: 선택형 example pack 경로 (또는 "없음")
 - `bootstrap_phase_path`: 공통 bootstrap phase 문서 경로 (또는 "해당 없음")
 - `bootstrap_mode`: `new`, `supplement`, `none`
 - `coverage_contract`: 사용자 확정된 Coverage Contract (필수 축 + 조건부 축)
 - `user_decisions`: 사용자가 확정한 선택 사항 (bootstrap 검증 결과 포함)
 - `existing_harness_path`: 기존 하네스가 있으면 해당 경로 (보강 모드 시)
-- `session_path`: 세션 디렉터리 경로 (조사 근거를 RESEARCH.md에 기록하기 위함)
+- `session_path`: 세션 디렉터리 경로
 - `stack`: 스택 정보 (또는 "해당 없음")
-- `stack_reference_path`: stack reference 문서 경로 (또는 "없음")
-- `stack_required_checks`: stack doc에서 추린 필수 확인 항목 (또는 "없음")
+- `stack_reference_path`: stack seed reference 문서 경로 (또는 "없음")
+- `stack_required_checks`: contract packet에 기록된 stack required checks
+- `engine_followup_required`: `yes` 또는 `no`
 
 ## 실행 절차
 
@@ -36,44 +38,55 @@
 
 이 단계는 모든 `task_type`에서 공통으로 적용한다.
 
-### 2. 어댑터 로드
+### 2. thin adapter 로드
 
 전달받은 `adapter_path`의 어댑터를 읽고, 다음 항목을 파악한다.
 
-- Coverage Contract: 필수 축과 조건부 축
-- 1차 근거 소스: 도메인별 소스 우선순위
-- Anti/Good 필수 쌍: 각 케이스의 Anti/Good 쌍 목록
-- 드라이런 입출력 예시: Positive Case + Negative Case
+- Coverage Contract의 최소 필수 축
+- 1차 근거 소스
+- Anti/Good 최소 필수 쌍
+- 최소 드라이런 기준
 
-bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contract`(사용자 검증 완료)를 기준으로 사용한다.
+대표 분류에 adapter가 없어서 `execution_path`가 `engine-asset bootstrap`인 경우에는, 본 에이전트가 전달한 `coverage_contract`와 `user_decisions`를 어댑터 초안의 기준으로 사용한다.
 
-대표 분류에 adapter가 없어서 `execution_path`가 `engine-asset bootstrap`인 경우에는, 본 에이전트가 전달한 `coverage_contract`와 `user_decisions`를 어댑터 초안의 기준으로 사용하고 같은 턴에 adapter/example/stack 자산까지 만든다.
+### 3. project contract packet 로드
 
-### 3. 기존 하네스 확인
+`contract_packet_path`를 읽고, 이 문서를 이번 프로젝트의 생성 기준점으로 사용한다.
+
+규칙:
+
+- contract packet이 생성/검증의 최종 진실원천이다.
+- adapter보다 packet의 프로젝트별 stack/library 규칙을 우선한다.
+- packet에 미확정 항목이 있으면 문서에 그대로 드러나게 하고, 하네스가 그 미확정성을 숨기지 않게 한다.
+
+### 4. 기존 하네스 확인
 
 `existing_harness_path`가 있으면 기존 하네스를 읽고, 부족한 섹션을 파악한다. 덮어쓰지 않고 보강 방향을 잡는다.
 
-### 4. paired example pack 확인
+### 5. 선택형 example pack 확인
 
 `example_pack_path`가 있으면 필요한 파일만 읽는다.
 
 규칙:
+
 - 이 경로는 정답 복사본이 아니라 reference-only evidence다.
 - 예시의 문체나 구조를 참고할 수는 있지만, 프로젝트 스택과 무관한 내용을 그대로 복사하지 않는다.
 - 현재 저장소 전용 사례는 portable core가 아니라 예시로만 취급한다.
-- 정식 adapter가 있는데 example pack이 없으면 미충족 항목으로 보고한다.
-- example pack은 품질 보강용 few-shot reference이지 최소 계약의 진실원천이 아니다. 계약 판단은 common phase와 adapter 기준을 우선한다.
+- example pack이 없어도 생성 자체는 진행한다.
+- example pack이 있다면 adapter나 contract packet과 충돌하는 내용을 final harness에 넣지 않는다.
 
-### 5. stack reference 확인
+### 6. stack seed reference 확인
 
-`stack_reference_path`가 있으면 해당 문서를 읽고 `stack_required_checks`를 산출물에 반영한다.
+`stack_reference_path`가 있으면 해당 문서를 읽고, `stack_required_checks`와 대조한다.
 
 규칙:
-- stack이 감지된 경우 `ARCHITECTURE.md`, `ANTI_PATTERNS.md`, `VALIDATION.md`에 stack-specific 규칙이 보여야 한다.
-- stack doc가 없는데 `execution_path`가 `engine-asset bootstrap`이면 필요한 stack doc까지 함께 생성한다.
-- stack doc가 없는데 `execution_path`가 `project-harness generation`이면, 현재 대상 프로젝트 하네스에 필요한 규칙만 반영하고 engine 자산 부재를 미충족 항목으로 보고한다.
 
-### 6. 이식성 패키징 판정
+- stack seed reference는 조사 보조 자료다.
+- stack이 감지된 경우 실제 반영 기준은 contract packet이다.
+- seed doc가 없는데 `execution_path`가 `engine-asset bootstrap`이면 필요한 seed doc까지 함께 생성할 수 있다.
+- seed doc가 없는데 `execution_path`가 `project-harness generation`이면, 현재 대상 프로젝트 하네스에는 필요한 규칙을 반영하고 `engine_followup_required`를 유지한다.
+
+### 7. 이식성 패키징 판정
 
 추가하려는 내용을 아래 셋 중 어디에 둘지 먼저 판정한다.
 
@@ -86,7 +99,7 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 현재 저장소의 예시, 절대경로, 과거 실패 이력을 코어 규칙으로 쓰지 않는다.
 - 코어 문서에 로컬 연결부가 꼭 필요하면 템플릿 또는 “프로젝트에서 채워야 하는 항목” 형태로만 남긴다.
 
-### 7. 도메인 조사
+### 8. 도메인 조사
 
 공통 research phase와 어댑터의 1차 근거 소스 규칙을 함께 적용해 조사를 수행한다. 어댑터에 1차 근거 소스가 정의되어 있지 않으면 공통 research phase의 범용 순서를 따른다.
 
@@ -98,6 +111,7 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 블로그 단독 근거로 하네스 규칙을 확정하지 않는다.
 
 가능하다면 다음 선택형 MCP를 보조 도구로 사용할 수 있다.
+
 - Tavily MCP: 최신 웹 검색과 원문 추출 보강
 - Context7 MCP: 라이브러리/프레임워크 문서 문맥 보강
 
@@ -121,23 +135,25 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 어댑터의 Coverage Contract 필수 축에서 이 프로젝트에 적합한 항목이 절반 미만이다
 
 도메인 탐색 서브에이전트 실행 시:
+
 - subagent_type: general-purpose
 - 지시: "[도메인]에 대해 핵심 작업 축(최소 6개), 실패 모드(최소 5개), 권위 있는 1차 근거 소스, 전문가가 사용하는 품질 기준, Anti/Good 쌍에 쓸 수 있는 구체적 사례를 조사해주세요."
 - 출력: Coverage 보충 정보 + 근거 소스 + 사례
 
-### 8. Anti/Good 쌍 작성
+### 9. Anti/Good 쌍 작성
 
-어댑터의 필수 쌍 목록에 있는 모든 케이스에 대해 Anti와 Good을 **반드시 쌍으로** 작성한다.
+어댑터의 필수 쌍 목록과 contract packet의 프로젝트별 필수 쌍 목록에 있는 모든 케이스에 대해 Anti와 Good을 **반드시 쌍으로** 작성한다.
 
 규칙:
+
 - 한쪽만 있으면 불완전 상태로 판정한다.
 - 각 쌍에는 케이스명을 명시하여 대응 관계가 명확해야 한다.
 - 코드 관련 도메인은 나쁜 예시(코드 블록) + 권장 대체(코드 블록)를 포함한다.
 - 비코드 도메인은 나쁜 사례(설명) + 권장 방법(설명)을 포함한다.
-- 어댑터 필수 쌍 외에 도메인 조사에서 발견한 추가 쌍도 작성한다.
-- example pack에 이미 강한 직접 예시가 있다면, 거기서 패턴의 강도와 서술 밀도를 참고한다.
+- 어댑터 최소 쌍 외에 contract packet에서 발견한 추가 쌍도 작성한다.
+- example pack에 강한 직접 예시가 있다면, 거기서 패턴의 강도와 서술 밀도를 참고할 수 있다.
 
-### 9. 산출물 작성
+### 10. 산출물 작성
 
 `instructions/<task_type>/*.md`에 하네스 문서를 작성하거나 보강한다.
 
@@ -152,12 +168,14 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - `references/stacks/<stack>.md` (해당 시)
 
 최종 산출물 기본 묶음:
+
 - `INDEX.md`
 - `ARCHITECTURE.md`
 - `ANTI_PATTERNS.md`
 - `VALIDATION.md`
 
 최소 섹션 계약:
+
 - 무엇을 위한 하네스인가
 - 언제 적용하는가
 - 어떤 절차로 진행하는가
@@ -167,9 +185,9 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 - 출처와 설계 근거가 어디에 있는가
 - 프로젝트 전용 연결부를 어디에 두어야 하는가
 - 현재 저장소 전용 예시를 코어 규칙으로 오해하지 않게 설명하는가
-- stack이 있다면 해당 stack-specific 규칙과 검증 포인트가 보이는가
+- contract packet에서 확정한 stack/library 규칙과 검증 포인트가 보이는가
 
-### 10. 조사 근거 기록
+### 11. 조사 근거 기록
 
 조사한 근거를 세션 `RESEARCH.md`에 기록한다. `session_path`의 RESEARCH.md에 항목을 추가한다.
 
@@ -180,19 +198,21 @@ bootstrap 보충 모드인 경우, 본 에이전트가 전달한 `coverage_contr
 1. **생성/수정된 파일 목록**: 경로와 각 파일의 역할
 2. **실행 경로**: `project-harness generation` 또는 `engine-asset bootstrap`
 3. **조사 근거 요약**: 사용한 1차 근거 소스와 핵심 발견
-4. **Coverage 충족 상태**: 어댑터 필수 축별 충족 여부
-5. **Anti/Good 쌍 충족 상태**: 어댑터 필수 쌍별 완성 여부
-6. **Paired example pack 사용 상태**: 어떤 example pack을 읽었고 무엇을 참고했는지
-7. **Stack 반영 상태**: stack reference 사용 여부와 반영한 규칙
-8. **공통 phase 사용 상태**: common research phase와 bootstrap phase를 어떻게 적용했는지
-9. **미충족 항목**: 조사나 작성에서 충족하지 못한 항목 (있으면)
-10. **도메인 탐색 서브에이전트 실행 여부**: 실행했으면 탐색 결과 요약
+4. **Coverage 충족 상태**: 어댑터 최소 축과 contract packet 프로젝트 축별 충족 여부
+5. **Anti/Good 쌍 충족 상태**: 최소 쌍과 프로젝트 쌍별 완성 여부
+6. **Contract packet 사용 상태**: 어떤 packet을 읽었고 어떤 항목을 반영했는지
+7. **선택형 example pack 사용 상태**: 어떤 example pack을 읽었고 무엇을 참고했는지
+8. **Stack 반영 상태**: stack seed reference 사용 여부와 contract packet 반영 내용
+9. **공통 phase 사용 상태**: common research phase와 bootstrap phase를 어떻게 적용했는지
+10. **engine_followup_required**: `yes/no`와 사유
+11. **미충족 항목**: 조사나 작성에서 충족하지 못한 항목 (있으면)
 
 ## 금지
 
 - 세션 파일(TICKETS.md, PROGRESS.md, DECISIONS.md)을 갱신하지 않는다 (본 에이전트 책임)
 - AGENTS.md, instructions/INDEX.md를 갱신하지 않는다 (본 에이전트 책임)
 - 사용자에게 직접 질문하지 않는다 (본 에이전트가 사용자 상호작용 담당)
+- contract packet 없이 생성 기준을 임의로 확정하지 않는다
 - 최종 문서에 출처를 생략하지 않는다
 - Anti/Good 쌍의 한쪽만 작성하고 완료로 처리하지 않는다
 - 로컬 예시를 portable core 규칙으로 승격하지 않는다

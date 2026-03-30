@@ -1,6 +1,6 @@
 # Research Reference Example Pack
 
-이 디렉터리는 `research` task adapter와 짝을 이루는 reference-only example pack이다.
+이 디렉터리는 `research` task adapter를 보조하는 reference-only example pack이다.
 
 목적:
 
@@ -10,8 +10,8 @@
 규칙:
 
 - 이 묶음은 새 프로젝트에 그대로 복사할 portable core가 아니다.
-- `references/adapters/research.md`의 규범 계약을 대체하지 않는다.
-- 정식 `research` adapter는 이 example pack이 함께 있을 때만 완료로 본다.
+- `references/adapters/research.md`와 project contract packet의 규범 계약을 대체하지 않는다.
+- example pack이 없어도 adapter 자체는 유효하다.
 
 최소 구성:
 

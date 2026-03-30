@@ -18,12 +18,12 @@
 - 최종 문서들에 출처와 설계 근거가 직접 들어 있다.
 - 대표 분류 집합으로 처리했는지, 예외적 새 `task_type`인지 설명할 수 있다.
 - discovery 등록 형식이 현재 `AGENTS.md`의 텍스트 포맷과 어긋나지 않는다.
-- 정식 adapter가 있다면 paired example pack이 존재한다.
-- paired example pack이 있다면 `README.md`, `ANTI_GOOD_REFERENCE.md`, `VALIDATION_REFERENCE.md` 최소 구성을 갖춘다.
-- adapter의 필수 Anti/Good 쌍과 example pack의 대표 예시가 크게 어긋나지 않는다.
+- project contract packet 경로와 revision 상태를 설명할 수 있다.
+- contract packet의 필수 작업 축과 금지 패턴이 산출물에 반영되어 있다.
 - 현재 저장소 전용 예시/경로/검증 이력이 코어 규칙과 분리되어 있다.
-- stack이 감지된 경우 stack reference 경로 또는 부재 사유를 설명할 수 있다.
+- stack이 감지된 경우 stack required checks가 contract packet에 기록되어 있다.
 - stack이 감지된 경우 stack-specific 규칙이 산출물의 구조/안티패턴/검증에 반영되어 있다.
+- `engine_followup_required` 판정이 적절하고 설명 가능하다.
 - validation artifact의 저장 위치와 최소 형식을 설명할 수 있다.
 
 ## 검증 서브에이전트
@@ -32,26 +32,28 @@
 
 ### 검증 서브에이전트의 역할
 
-- 하네스 생성 과정을 모르는 독립 인스턴스로서, 생성된 하네스 문서만 읽고 검증한다.
+- 하네스 생성 과정을 모르는 독립 인스턴스로서, 생성된 하네스 문서와 contract packet만 읽고 검증한다.
 - 자기 검증 편향(verification bias)을 방지하기 위해 하네스를 만든 에이전트와 분리된다.
 - worktree에서 생성된 파일은 worktree_path를 통해 접근한다.
 
 ### 검증 절차
 
 1. 생성된 `instructions/<task_type>/*.md` 파일을 읽는다.
-2. 공통 `research` phase, task adapter, paired example pack, stack reference가 제공되었다면 함께 읽는다.
-3. 아래 "질문" 항목에 대해 하네스와 관련 reference만으로 답할 수 있는지 확인한다.
-4. 어댑터 연동 검증 항목을 확인한다.
-5. 가상 작업을 시도하고, 하네스에서 빠진 정보를 파악한다.
-6. 결과를 보고 형식으로 반환한다.
+2. 공통 `research` phase, task adapter, project contract packet을 함께 읽는다.
+3. 선택형 example pack과 stack seed reference가 제공되었다면 추가로 읽는다.
+4. 아래 "질문" 항목에 대해 하네스와 관련 reference만으로 답할 수 있는지 확인한다.
+5. contract packet 연동 검증 항목을 확인한다.
+6. 가상 작업을 시도하고, 하네스에서 빠진 정보를 파악한다.
+7. 결과를 보고 형식으로 반환한다.
 
 ### 보고 형식
 
-```
+```text
 - 누락 항목: [목록]
 - 모호 지점: [목록]
 - 충돌 규칙: [목록]
 - 체크리스트 통과 여부: [항목별]
+- engine follow-up required: [yes/no]
 - 종합 판정: [통과/보강 필요]
 - 구현 시작 허용: [yes/no]
 ```
@@ -76,21 +78,22 @@
 - 세션 압축 이후에도 문서만으로 맥락을 이어갈 수 있는가
 - 다른 프로젝트에 복사할 때 무엇을 그대로 가져가고 무엇을 로컬에서 다시 만들어야 하는지 보이는가
 
-## 어댑터 연동 검증
+## contract packet 연동 검증
 
-어댑터가 로드된 경우 추가로 확인한다.
+contract packet이 로드된 경우 추가로 확인한다.
 
-- 어댑터 Coverage Contract의 필수 축이 모두 하네스 산출물에 반영되었는가
-- 어댑터 Anti/Good 필수 쌍이 ANTI_PATTERNS.md에 모두 쌍으로 존재하는가 (한쪽만 있으면 실패)
-- 어댑터 드라이런의 Positive Case에서 하네스가 올바른 방향을 안내하는가
-- 어댑터 드라이런의 Negative Case에서 하네스가 해당 패턴을 차단하는가
-- 어댑터가 정의한 1차 근거 소스가 산출물의 출처 체계에 반영되었는가
-- paired example pack이 존재하는가
-- paired example pack 최소 3문서가 모두 존재하는가
-- example pack이 adapter 계약과 충돌하지 않는가
+- contract packet이 존재하는가
+- contract packet의 프로젝트 목표와 작업 범위가 하네스 문서에 반영되어 있는가
+- thin adapter의 최소 Coverage Contract가 모두 하네스 산출물에 반영되었는가
+- contract packet의 필수 축이 모두 하네스 산출물에 반영되었는가
+- thin adapter의 Anti/Good 최소 필수 쌍이 ANTI_PATTERNS.md에 모두 쌍으로 존재하는가
+- contract packet의 프로젝트별 Anti/Good 필수 쌍이 ANTI_PATTERNS.md에 모두 쌍으로 존재하는가
+- thin adapter와 contract packet이 서로 충돌하지 않는가
+- 선택형 example pack이 있다면 adapter/packet 계약과 충돌하지 않는가
 - 코어 규칙과 project adapter / local evidence가 뒤섞이지 않았는가
-- stack이 감지된 경우 stack reference가 제공되었는가 (또는 부재 사유가 적절한가)
-- stack-specific 필수 확인 항목이 `ARCHITECTURE.md`, `ANTI_PATTERNS.md`, `VALIDATION.md`에 반영되었는가
+- stack이 감지된 경우 stack required checks가 `ARCHITECTURE.md`, `ANTI_PATTERNS.md`, `VALIDATION.md`에 반영되었는가
+- stack seed reference가 없더라도 현재 프로젝트 기준 contract packet이 충분히 닫혀 있는가
+- `engine_followup_required`가 적절한가
 
 bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확인한다.
 
@@ -104,6 +107,7 @@ bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확
 - 문서가 있는데 적용 시점이 불명확하다.
 - 공통 `research` phase를 거치지 않고 task adapter만 적용했다.
 - 기존 하네스가 있으나 최소 계약 미달인데도 재사용 결정이 내려졌다.
+- contract packet 없이 하네스를 생성하거나 검증했다.
 - 안티패턴만 있고 권장 흐름이 없다.
 - 권장 흐름만 있고 검증 기준이 없다.
 - 최종 산출물이 `temps/`에만 있다.
@@ -111,12 +115,12 @@ bootstrap을 사용한 경우 (신규 모드/보충 모드 모두) 추가로 확
 - 새 `task_type`를 만들었는데 `AGENTS.md`와 `instructions/INDEX.md`를 함께 갱신하지 않았다.
 - 최종 문서에서 출처를 생략하고 `RESEARCH.md`에만 근거를 남겼다.
 - `AGENTS.md` 등록 형식이 현재 문서의 섹션형 서술 포맷과 크게 어긋난다.
-- **어댑터 Coverage Contract 필수 축이 하네스에 누락되어 있다.**
-- **어댑터 Anti/Good 필수 쌍의 한쪽(Anti만 또는 Good만)이 빠져 있다.**
-- **정식 adapter가 있는데 paired example pack이 없다.**
-- **paired example pack 최소 구성이 깨져 있다.**
-- **대표 분류인데 adapter가 없었음에도 `engine-asset bootstrap` 경로를 타지 않았다.**
-- **stack이 감지됐는데 stack reference가 검증 입력에 포함되지 않았거나 산출물에 반영되지 않았다.**
+- thin adapter 최소 Coverage Contract 필수 축이 하네스에 누락되어 있다.
+- contract packet의 프로젝트 필수 축이 하네스에 누락되어 있다.
+- thin adapter 또는 contract packet의 Anti/Good 필수 쌍의 한쪽(Anti만 또는 Good만)이 빠져 있다.
+- 선택형 example pack이 adapter/packet 계약과 충돌한다.
+- 대표 분류인데 adapter가 없었음에도 `engine-asset bootstrap` 경로를 타지 않았다.
+- stack이 감지됐는데 contract packet에 stack required checks가 없거나 산출물에 반영되지 않았다.
 - 검증 결과가 `통과`가 아닌데 구현 티켓이 시작되었다.
 - validation artifact가 저장되지 않았는데 구현 티켓이 시작되었다.
 - 테스트 전략이 구현 후 테스트 정합화로 밀렸는데도 하네스가 차단하지 못했다.

@@ -31,6 +31,7 @@
 - bootstrap 결과는 기본적으로 초안 또는 보충 정보다.
 - 현재 프로젝트 전용 예시와 실패 사례는 기본적으로 `local evidence pack` 후보다.
 - 보충 모드에서는 기존 task adapter의 방법론(HOW)을 교체하지 않는다.
+- bootstrap 결과는 project contract packet으로 먼저 정리하고, 그 뒤 하네스 산출물에 반영한다.
 
 ## 수행 절차
 
@@ -46,8 +47,8 @@
 4. 보수적 기본값 명시
    - 사용자가 답하지 못한 항목은 보수적 기본값으로 채우고 표시한다.
 5. 생성 단계로 전달
-   - 확정한 Coverage, 실패 모드, 근거 소스, 품질 기준을 생성 단계에 넘긴다.
-   - 신규 모드라면 정식 task adapter와 paired example pack까지 함께 만들 범위를 닫는다.
+   - 확정한 Coverage, 실패 모드, 근거 소스, 품질 기준을 contract packet에 먼저 기록한다.
+   - 신규 모드라면 정식 task adapter와 필요 시 example pack/seed asset까지 함께 만들 범위를 닫는다.
 
 ## 생성 단계로 넘겨야 하는 출력
 
@@ -56,7 +57,8 @@
 - 확정된 Coverage Contract
 - 사용자 확인 결과
 - 보수적 기본값 표시
-- 신규 모드라면 생성해야 할 adapter 경로와 paired example pack 경로
+- contract packet에 반영해야 할 필드
+- 신규 모드라면 생성해야 할 adapter 경로와 필요 시 example/seed 자산 경로
 
 ## 실패 신호
 

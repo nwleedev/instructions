@@ -11,6 +11,7 @@
 - 검색 실행 안전 규칙
 - 반대 근거 또는 한계 확인
 - 예시와 계약을 분리하기 위한 evidence 수집
+- project contract packet 작성을 위한 조사 입력
 
 `research`가 최종 `task_type`인 경우에도 이 phase를 먼저 수행하고, 그 다음 `references/adapters/research.md`를 추가 적용한다.
 
@@ -50,15 +51,16 @@
 - 둘 다 선택형 도구다.
 - 최종 규칙과 인용은 항상 공식 문서 또는 실제 소스 코드로 다시 확인한다.
 
-## task adapter로 넘겨야 하는 출력
+## task adapter / contract packet으로 넘겨야 하는 출력
 
-공통 조사 phase가 끝나면 최소한 아래를 task adapter 단계로 전달한다.
+공통 조사 phase가 끝나면 최소한 아래를 다음 단계로 전달한다.
 
 - 1차 근거 소스 목록
 - 최신성 확인 정보
 - 실패 모드 또는 예외 케이스
 - Anti/Good 직접 사례 후보
 - 현재 프로젝트에서만 통하는 local evidence와 공통 규칙 후보의 분리 메모
+- contract packet에 기록해야 할 스택/라이브러리/미확정 항목
 
 ## 실패 신호
 
