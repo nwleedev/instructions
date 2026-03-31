@@ -1,5 +1,8 @@
 # REPOSITORY.md
 
+<!-- HARNESS-SYNC-CORE-END -->
+<!-- HARNESS-SYNC-PROJECT-START -->
+
 <!--
 이 파일은 각 프로젝트에서만 유효한 추가 운영 규칙을 적는 자리입니다.
 

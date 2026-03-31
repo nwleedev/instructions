@@ -1,5 +1,8 @@
 # REPOSITORY.md
 
+<!-- HARNESS-SYNC-CORE-END -->
+<!-- HARNESS-SYNC-PROJECT-START -->
+
 ## Git 커밋
 
 - 각 티켓의 작업을 끝낼 때마다 Git에 커밋한다.

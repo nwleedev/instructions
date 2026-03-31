@@ -27,6 +27,7 @@
 ## Required Work Axes
 
 - required_axes:
+  - architecture_pattern_evaluation: # 도메인 권장 패턴 대비 현재 프로젝트 아키텍처 평가 (기본 축)
 
 ## Forbidden Patterns
 

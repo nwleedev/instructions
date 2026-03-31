@@ -134,15 +134,19 @@
 ### v1 관리 대상
 
 - 루트 `AGENTS.md`
-  - 동기화 시 실제 source 저장소의 루트 문서를 그대로 복사하지 않고 `instructions/templates/AGENTS-TEMPLATE.md` 템플릿으로 override한다.
+  - 동기화 시 실제 source 저장소의 루트 문서를 그대로 복사하지 않고 `instructions/templates/AGENTS-TEMPLATE.md` 템플릿을 source로 사용한다.
+  - 마커 기반 병합: 템플릿의 core 영역만 교체하고, 대상 프로젝트의 project 영역은 보존한다.
 - 루트 `CLAUDE.md`
 - `sessions/*`
 - `instructions/*.md`
   - top-level 문서만 관리한다.
-  - `instructions/REPOSITORY.md`는 `instructions/templates/REPOSITORY-TEMPLATE.md` 템플릿으로 override한다.
+  - `instructions/REPOSITORY.md`는 `instructions/templates/REPOSITORY-TEMPLATE.md` 템플릿을 source로 사용한다.
+  - 마커 기반 병합: 템플릿의 core 영역만 교체하고, 대상 프로젝트의 project 영역은 보존한다.
 - `instructions/templates/*`
 - `.agents/skills/harness-engine/*`
   - 내부적으로는 `references/common/*`, `references/adapters/<task_type>.md`, `references/examples/<task_type>/*`, `references/stacks/*`를 함께 관리할 수 있다.
+  - `.claude/skills/harness-engine/*`에도 동일 파일을 미러링한다. Codex는 `.agents/`, Claude Code는 `.claude/`를 읽으므로 양쪽에 배포한다.
+  - 소스 저장소에서는 `.claude/skills/harness-engine`을 `.agents/skills/harness-engine`의 심볼릭 링크로 유지한다.
 
 ### v1 비관리 대상
 
@@ -163,11 +167,33 @@
 
 ### 업데이트 정책
 
-- 관리 대상 파일은 source의 최신 내용으로 덮어쓴다.
+- 일반 관리 대상 파일은 source의 최신 내용으로 덮어쓴다.
 - source에서 사라진 관리 대상 파일은 manifest 기준으로만 제거한다.
 - `.agents` 아래에서는 `harness-engine` 경로만 갱신한다.
 - 대상 프로젝트에 이미 있던 다른 `.agents` 자산은 유지한다.
-- 대상 프로젝트의 루트 `AGENTS.md`와 `instructions/REPOSITORY.md`는 템플릿 override 규칙을 우선 적용한다.
+- 대상 프로젝트의 루트 `AGENTS.md`와 `instructions/REPOSITORY.md`는 마커 기반 병합을 적용한다.
+
+### 마커 기반 병합 형식
+
+`AGENTS.md`와 `instructions/REPOSITORY.md`는 파일 내 마커로 portable core 영역과 project-local 영역을 구분한다.
+
+```markdown
+# 문서 제목
+
+(portable core 내용 — sync 시 템플릿으로 교체됨)
+
+<!-- HARNESS-SYNC-CORE-END -->
+<!-- HARNESS-SYNC-PROJECT-START -->
+
+(project-local 내용 — sync 시 보존됨)
+```
+
+규칙:
+
+- `HARNESS-SYNC-CORE-END` 마커 위: 템플릿에서 가져온 portable core. sync 시 교체된다.
+- `HARNESS-SYNC-PROJECT-START` 마커 아래: 대상 프로젝트 전용 내용. sync 시 보존된다.
+- 대상 파일에 마커가 없으면 (레거시): 기존 전체 내용을 project-local로 간주하여 보존한다.
+- 새 프로젝트에 처음 sync하면: 템플릿이 그대로 복사되어 마커가 자동 포함된다.
 
 ## Change Request Packet
 

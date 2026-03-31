@@ -46,6 +46,7 @@ description: 사용자가 언급한 작업 분야에 맞춰 `instructions/<task_
 ## 작업 시작 전 확인
 
 - 루트 `AGENTS.md`, `instructions/*.md`를 읽었는지 확인한다.
+- 특히 `instructions/SESSIONS.md`의 임시 파일 규칙(temps 경로, `/tmp` 금지)을 확인한다.
 - `instructions/REPOSITORY.md`가 있으면 읽었는지 확인한다.
 - 사용자 요청만으로 범위가 닫히는지 확인한다.
 - 최종 산출물이 어느 `task_type` 아래에 위치할지 결정한다.
@@ -211,6 +212,8 @@ Agent tool 호출:
 1. 생성 지침: .agents/skills/harness-engine/references/GENERATION.md
 2. 산출물 규칙: .agents/skills/harness-engine/references/OUTPUT_CONTRACT.md
 
+주의: 임시 파일은 반드시 session_path 아래 temps/에 기록합니다. /tmp 사용 금지. 상세 규칙은 instructions/SESSIONS.md의 "임시 파일" 섹션을 따릅니다.
+
 작업 정보:
 - task_type: {task_type}
 - execution_path: {project-harness generation | engine-asset bootstrap}
@@ -268,6 +271,7 @@ Agent tool 호출:
 
 하네스 경로: {worktree_path}/instructions/{task_type}/
 검증 기준: .agents/skills/harness-engine/references/VALIDATION.md
+임시 파일 규칙: session_path 아래 temps/에만 기록. /tmp 사용 금지.
 공통 research phase: {.agents/skills/harness-engine/references/common/RESEARCH_PHASE.md}
 task adapter: {adapter_path 또는 "없음"}
 project contract packet: {contract_packet_path}
