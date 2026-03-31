@@ -19,8 +19,8 @@
   - 세팅한다면 현재 작업에 대해서 임의로 세션 아이디를 세팅하고 진행
   - 세팅하지 않는다면 무시하고 진행.
 
-- 사용자가 프롬프트를 Codex, Claude에 입력하여, Codex, Claude가 작업을 시작할 때, 그리고 끝낼 때마다 TICKETS.md(+ tickets 폴더), PROGRESS.md, DECISIONS.md(+ decisions 폴더), RESEARCH.md에 내용을 적절한 위치에 기록한다.
-  - 작업을 시작할 때에도 세션 파일을 기록하는 이유는 작업 도중 컨텍스트 압축이 발생했을 때 작업 및 대화 맥락과 흐름을 유지하기 위함.
+- 사용자가 프롬프트를 Codex, Claude에 입력하여, Codex, Claude가 작업 턴을 시작할 때, 그리고 작업 턴을 끝낼 때마다 TICKETS.md(+ tickets 폴더), PROGRESS.md, DECISIONS.md(+ decisions 폴더), RESEARCH.md에 내용을 적절한 위치에 기록한다.
+  - 각각의 작업 턴을 시작할 때 세션 파일을 기록하는 이유는 작업 도중 컨텍스트 압축이 발생했을 때 작업 및 대화 맥락과 흐름을 유지하기 위함.
   - "만약 갑작스럽게 컨텍스트 압축(compaction)이 발생한다면, 우리가 작업 맥락과 대화 맥락을 유지하기 위해서는 어떤 파일에 어떤 내용을 기록해야 하는가"에 대해서 조사하고 세션 기록에 반영한다.
 - `PLANS.md`는 작업 시작 가능 여부를 판정하는 기준 문서로 취급한다.
   - `PLANS.md`를 읽고 작업 완료에 필요한 정보가 비어 있거나 모호하면, 어떤 정보가 추가로 필요한지 사용자에게 제시한다.
@@ -277,8 +277,8 @@
 2. 다음 티켓과 `Why This Advances The Original Goal`을 갱신한다.
 3. `PROGRESS.md`의 `Done`, `In progress`, `Blocked`, `Next`를 현재 상태로 맞춘다.
 4. 하네스 생성/보강/감사 작업을 마쳤다면 validation artifact를 저장했는지 확인한다.
-4. 결정이나 외부 근거가 추가되었다면 `DECISIONS.md`, `RESEARCH.md`에 반영한다.
-5. 종료 기록이 누락된 상태라면 완료 보고를 하지 않고 먼저 세션 파일을 보정한다.
+5. 결정이나 외부 근거가 추가되었다면 `DECISIONS.md`, `RESEARCH.md`에 반영한다.
+6. 종료 기록이 누락된 상태라면 완료 보고를 하지 않고 먼저 세션 파일을 보정한다.
 
 ## 누락 발견 시 보정 절차
 
@@ -327,6 +327,7 @@
 ## 임시 파일
 
 - PC 루트에 접근하는 대신 `./store/<session_id>/temps` 폴더에 기록한다.
+
   - "/tmp" 위치도 사용하지 않음.
   - Playwright MCP에서 발생하는 파일도 PC 루트 대신 `./store/<session_id>/temps` 위치여야 한다.
 
