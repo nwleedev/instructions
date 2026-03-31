@@ -36,6 +36,8 @@
 ## Stack-Specific Required Checks
 
 - stack_required_checks:
+- enforcement_tool: # 해당 스택의 주요 린트/정적 분석 도구 (예: eslint, ruff, golangci-lint). 비소프트웨어 도메인은 비워 둔다.
+- enforcement_severity: # 규칙 적용 강도 (strict/moderate/minimal). 비소프트웨어 도메인은 비워 둔다.
 
 ## Sources
 

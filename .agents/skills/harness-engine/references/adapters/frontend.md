@@ -198,6 +198,37 @@ stack 파일은 seed reference일 뿐이다. 실제 프로젝트 규칙은 contr
 
 아키텍처 스타일은 stack seed와 별도로 contract packet에서 명시한다. FSD가 선택된 경우 FSD 공식 문서를 1차 근거에 추가하고, `ARCHITECTURE.md`, `ANTI_PATTERNS.md`, `VALIDATION.md`에 public API, layer rule, cross-import 방지 규칙이 보여야 한다.
 
+## Enforcement (강제 규칙 설정)
+
+프론트엔드 하네스 생성 시, ANTI_PATTERNS.md의 안티패턴 중 ESLint로 자동 검출 가능한 항목을 `enforcement/LINT_RULES.md`에 매핑한다.
+
+### 필수 ESLint 플러그인
+
+스택에 따라 다음 플러그인을 기본으로 포함한다:
+
+- **공통**: `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y`, `eslint-plugin-import`
+- **TypeScript**: `@typescript-eslint/eslint-plugin`, `@typescript-eslint/parser`
+- **Next.js**: `eslint-config-next` (`next/core-web-vitals` 또는 `next/recommended`)
+- **TanStack Query**: `@tanstack/eslint-plugin-query`
+
+### 안티패턴 → ESLint 규칙 매핑 예시
+
+| 안티패턴 | ESLint 규칙 | 심각도 |
+|---------|------------|--------|
+| useEffect fetch | 커스텀 규칙 또는 TanStack Query 플러그인 | error |
+| exhaustive-deps 무시 | `react-hooks/exhaustive-deps` | error |
+| import 순서 불일치 | `import/order` | warn |
+| 미사용 변수 | `@typescript-eslint/no-unused-vars` | error |
+| any 타입 남용 | `@typescript-eslint/no-explicit-any` | error (strict) / warn (moderate) |
+
+### 강도 기준
+
+contract packet의 `enforcement_severity`에 따라:
+
+- **strict**: 위 규칙 대부분 `error`. `next/core-web-vitals` 기반. 추가 접근성/성능 규칙 포함.
+- **moderate**: 핵심 안티패턴만 `error`, 스타일 관련은 `warn`.
+- **minimal**: 핵심 안티패턴만 `warn`, 나머지 비활성화.
+
 ## 스킬 내부 reference example
 
 - `references/examples/frontend/*`에는 현재 저장소의 레거시 프론트엔드 자료와 직접 예시에서 추린 reference-only evidence가 있다.

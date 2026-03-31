@@ -191,7 +191,35 @@
 - 어댑터 최소 쌍 외에 contract packet에서 발견한 추가 쌍도 작성한다.
 - example pack에 강한 직접 예시가 있다면, 거기서 패턴의 강도와 서술 밀도를 참고할 수 있다.
 
-### 11. 산출물 작성
+### 11. 강제 규칙 추출 (소프트웨어 도메인, 선택)
+
+소프트웨어 도메인이고 contract packet에 스택이 감지된 경우에만 실행한다. 비소프트웨어 도메인은 이 단계를 건너뛴다.
+
+절차:
+
+1. 10단계에서 작성한 Anti/Good 쌍을 검토하여, **자동 검출 가능한 안티패턴**을 식별한다.
+   - 린트 규칙으로 강제할 수 있는 패턴 (예: 미사용 변수, 잘못된 import 순서, 금지된 API 사용)
+   - 정적 분석으로 강제할 수 있는 패턴 (예: 타입 안전성, 순환 의존성)
+
+2. 해당 스택의 린트/정적 분석 도구에서 대응하는 규칙을 조사한다.
+   - JavaScript/TypeScript: ESLint + 관련 플러그인
+   - Python: Ruff, Flake8, mypy
+   - Go: golangci-lint
+   - 어댑터에 enforcement 도구가 명시되어 있으면 그것을 우선한다.
+
+3. `enforcement/LINT_RULES.md`에 정리한다. 각 규칙에 대해:
+   - 규칙 이름 (예: `react-hooks/exhaustive-deps`)
+   - 심각도 (`error` 또는 `warn`)
+   - 적용 근거 (어떤 안티패턴을 차단하는지)
+   - 설정 코드 블록 (실제 설정 파일에 넣을 내용)
+
+규칙:
+
+- 이 단계의 산출물은 설정 **가이드 문서**(`.md`)다. 실제 설정 파일(`.eslintrc`, `ruff.toml` 등)은 구현 시 이 문서를 기반으로 생성한다.
+- contract packet의 `enforcement_severity` 값에 따라 규칙 강도를 조절한다 (strict: 대부분 error, moderate: 핵심만 error 나머지 warn, minimal: 핵심만 warn).
+- 프로젝트에 이미 린트 설정이 있으면 덮어쓰지 않고 보강 방향을 문서에 명시한다.
+
+### 12. 산출물 작성
 
 `instructions/<task_type>/*.md`에 하네스 문서를 작성하거나 보강한다.
 
@@ -225,7 +253,7 @@
 - 현재 저장소 전용 예시를 코어 규칙으로 오해하지 않게 설명하는가
 - contract packet에서 확정한 stack/library 규칙과 검증 포인트가 보이는가
 
-### 12. 조사 근거 기록
+### 13. 조사 근거 기록
 
 조사한 근거를 세션 `RESEARCH.md`에 기록한다. `session_path`의 RESEARCH.md에 항목을 추가한다.
 

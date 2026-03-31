@@ -25,6 +25,7 @@
 - 구조/방법론 평가에서 발견된 미충족 격차가 ANTI_PATTERNS.md와 VALIDATION.md에 반영되어 있다.
 - stack이 감지된 경우 stack required checks가 contract packet에 기록되어 있다.
 - stack이 감지된 경우 stack-specific 규칙이 산출물의 구조/안티패턴/검증에 반영되어 있다.
+- 소프트웨어 도메인이고 스택이 감지된 경우, ANTI_PATTERNS.md의 자동 검출 가능한 안티패턴이 `enforcement/LINT_RULES.md`에 매핑되어 있다.
 - `engine_followup_required` 판정이 적절하고 설명 가능하다.
 - validation artifact의 저장 위치와 최소 형식을 설명할 수 있다.
 
