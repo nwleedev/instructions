@@ -1,0 +1,19 @@
+{
+  "name": "instructions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "analyze:claude-code:v1": "python3 scripts/build_claude_code_analysis.py",
+    "analyze:claude-code:v2": "node scripts/build_claude_code_analysis_v2.cjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  }
+}
