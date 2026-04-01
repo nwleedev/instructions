@@ -103,13 +103,13 @@ AI가 작업할 때 어떤 태도를 지녀야 하는지 작성한 것이다.
 
 - 여러 프로젝트로 복사해서 쓰는 하네스는 `portable core`, `project adapter`, `local evidence pack`을 분리해 관리한다.
 - 프로젝트마다 달라지는 경로, 검증 명령, 예시, 과거 증빙은 코어 규칙으로 승격하지 않는다.
-- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 source-side 메타 문서인 `instructions/harness/PORTABILITY.md`의 change request packet 형식을 따른다.
+- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 source-side 메타 문서인 `instructions/harness/PORTABILITY.md`의 change request packet 형식을 따른다. (이 파일은 원본 하네스 저장소에만 존재하며 sync-harness.sh 배포 범위에 포함되지 않는다.)
 
 ## 하네스 문제 자동 보고
 
 - 실제 프로젝트에서 작업 중 하네스 계층(`AGENTS.md`, `instructions/*`, `harness-engine`, 세션 규칙)에 문제가 발생하면, 에이전트는 먼저 구조화 리포트를 작성한다.
 - 기본 템플릿은 `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`를 사용한다.
-- 기본 저장 경로는 `store/<session_id>/temps/harness-issues/`다. 세션 디렉터리가 없는 프로젝트에서는 `temps/harness-issues/`를 사용한다.
+- 기본 저장 경로는 `store/<session_id>/temps/harness-issues/`다. 세션 디렉터리가 없는 환경에서는 프로젝트의 `temps/harness-issues/`를 사용한다.
 - 보고서에는 최소한 사용자 목표, 읽은 규칙 파일, 실제 실패 동작, 기대 동작, 재현 절차, 로컬 제약, 일반화 후보를 포함한다.
 - 보고서 작성 없이 코어 하네스 문제를 구두 설명만 남기고 종료하지 않는다.
 

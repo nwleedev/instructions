@@ -110,8 +110,9 @@ write_if_missing "$STORE_DIR/TICKETS.md" "# TICKETS.md
 - 없음
 "
 
+PROGRESS_DATE=$(date '+%Y-%m-%d %H:%M')
 write_if_missing "$STORE_DIR/PROGRESS.md" "# PROGRESS.md
-## 2026-01-01 00:00
+## $PROGRESS_DATE
 ### Done
 - 없음
 
