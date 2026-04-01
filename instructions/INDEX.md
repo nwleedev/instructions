@@ -35,7 +35,7 @@
 - 로컬 작업 분야 하네스가 있으면 해당 문서를 추가 적용한다.
 - 사용자가 해당 도메인에 익숙하지 않다고 명시했거나 프로젝트 분야가 낯설면, `instructions/learning-mode/*`를 주 작업 하네스와 함께 적용한다.
 - 로컬 작업 분야 하네스가 없으면 `harness-engine` 스킬을 사용해 생성 또는 보강한다.
-- 이 저장소의 `instructions/frontend/*`, `instructions/research/*`, `instructions/learning-mode/*`는 repo-local 상세 하네스 예시이며, 모든 프로젝트의 기본 복사 범위로 가정하지 않는다.
+- 이 저장소의 `instructions/frontend/*`, `instructions/research/*`, `instructions/learning-mode/*`, `instructions/source-analysis/*`, `instructions/operator-stack/*`는 repo-local 상세 하네스 예시이며, 모든 프로젝트의 기본 복사 범위로 가정하지 않는다.
 
 ## 하네스 이식성과 환류
 

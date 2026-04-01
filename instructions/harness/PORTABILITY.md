@@ -75,6 +75,8 @@
 - `instructions/frontend/*`
 - `instructions/research/*`
 - `instructions/learning-mode/*`
+- `instructions/source-analysis/*`
+- `instructions/operator-stack/*`
 
 규칙:
 
@@ -155,6 +157,8 @@
 - `instructions/research/*`
 - `instructions/frontend/*`
 - `instructions/learning-mode/*`
+- `instructions/source-analysis/*`
+- `instructions/operator-stack/*`
 - 대상 프로젝트의 다른 `.agents` 스킬, 에이전트, 로컬 자산
 - 각 프로젝트가 따로 만든 `instructions/<task_type>/*` 로컬 하네스
 

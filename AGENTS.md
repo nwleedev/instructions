@@ -109,3 +109,5 @@ Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 
 - `instructions/frontend/*`
 - `instructions/research/*`
 - `instructions/learning-mode/*`
+- `instructions/source-analysis/*`
+- `instructions/operator-stack/*`
