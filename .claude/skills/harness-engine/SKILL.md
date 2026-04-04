@@ -38,11 +38,12 @@ user-invocable: true
 9. 세션 경로에 프로젝트별 `contract packet`을 만들거나 갱신한다.
 10. Coverage 갭 또는 미지 도메인이면 공통 bootstrap phase와 사용자 검증을 수행하고 contract packet을 보강한다.
 11. 선택형 example pack과 stack seed reference가 있으면 참고 자료로만 로드한다.
-12. **하네스 생성 서브에이전트를 실행한다.**
-13. **검증 서브에이전트를 실행한다.**
-14. 검증 결과를 contract packet에 먼저 반영한 뒤 하네스를 보강한다.
-15. 새 하네스 스킬을 만들었다면 `.claude/skills/use-skills.md`의 Available Skills 목록을 갱신한다.
-16. 세션 기록(SESSION.md)을 갱신한다.
+12. **Source Coverage Manifest를 작성하고 검증한다 (HARD GATE).** 모든 소스 파일이 최소 1개 하네스에 매핑되었는지 확인한다. UNASSIGNED가 0이 아니면 사용자에게 매핑 결정을 요청하고 대기한다. cross-cutting 유형이 있으면 Cross-Cutting Distribution도 작성한다.
+13. **하네스 생성 서브에이전트를 실행한다.**
+14. **검증 서브에이전트를 실행한다.**
+15. 검증 결과를 contract packet에 먼저 반영한 뒤 하네스를 보강한다.
+16. 새 하네스 스킬을 만들었다면 `.claude/skills/use-skills.md`의 Available Skills 목록을 갱신한다.
+17. 세션 기록(SESSION.md)을 갱신한다.
 
 ## 작업 시작 전 확인
 
@@ -235,6 +236,8 @@ Agent tool 호출:
 - stack_reference_path: {references/stacks/<stack>.md 또는 "없음"}
 - stack_required_checks: {contract packet에 반영한 stack required checks}
 - engine_followup_required: {yes/no}
+- coverage_manifest: {contract packet 내 Source Coverage Manifest 내용}
+- cross_cutting_distribution: {contract packet 내 Cross-Cutting Distribution 내용 또는 "없음"}
 ```
 
 ### 서브에이전트 결과 처리
@@ -339,7 +342,7 @@ stack seed reference: {stack_reference_path 또는 "없음"}
 - stack이 감지됐는데 contract packet에 stack required checks를 남기지 않기
 - 검증 결과가 `통과`가 아닌데 구현 티켓을 시작하기
 - Anti/Good 쌍의 한쪽만 작성하고 완료로 처리하기
-- 최종 문서에 출처를 남기지 않고 `RESEARCH.md`에만 근거를 두기
+- 최종 문서에 출처를 남기지 않고 세션 notes에만 근거를 두기
 - 현재 저장소 전용 예시를 portable core 규칙으로 승격하기
 - 복사형 사용 중 생긴 문제를 재현 정보 없이 코어 변경 요청으로 올리기
 

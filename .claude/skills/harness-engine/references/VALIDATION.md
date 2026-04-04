@@ -28,6 +28,10 @@
 - 소프트웨어 도메인이고 스택이 감지된 경우, ANTI_PATTERNS.md의 자동 검출 가능한 안티패턴이 `enforcement/LINT_RULES.md`에 매핑되어 있다.
 - `engine_followup_required` 판정이 적절하고 설명 가능하다.
 - validation artifact의 저장 위치와 최소 형식을 설명할 수 있다.
+- Source Coverage Manifest가 contract packet에 존재하며 UNASSIGNED가 0개이다.
+- 생성된 하네스 파일 목록이 Manifest의 대상 하네스 열과 일치한다.
+- cross-cutting으로 표시된 소스가 실제로 해당 하네스들에 반영되었다.
+- cross-cutting 배포 로그가 세션 notes에 존재한다 (cross-cutting 소스가 있는 경우).
 
 ## 검증 서브에이전트
 

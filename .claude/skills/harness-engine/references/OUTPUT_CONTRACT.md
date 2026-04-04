@@ -142,6 +142,55 @@
 - thin adapter는 최소 하한선을 제공하고, contract packet은 실제 프로젝트 stack/library 조합을 닫는다.
 - validator는 contract packet 경로, revision, engine follow-up 필요 여부를 artifact에 남겨야 한다.
 
+### Source Coverage Manifest (contract packet 필수 섹션)
+
+contract packet에는 반드시 Source Coverage Manifest를 포함해야 한다. 이 섹션은 모든 소스 자료가 하네스에 빠짐없이 매핑되었는지를 추적한다.
+
+형식:
+
+```markdown
+## Source Coverage Manifest
+
+| 소스 파일 | 대상 하네스 | 유형 |
+|---|---|---|
+| STATE_MANAGEMENT.md | harness-fe-zustand | direct |
+| REFACTORING.md | harness-fe-testing, harness-fe-fsd | cross-cutting |
+| UX_REVIEW.md | harness-fe-fsd, harness-fe-react-hook-form | cross-cutting |
+
+UNASSIGNED 수: 0
+```
+
+규칙:
+- 모든 소스 파일은 최소 1개 하네스에 매핑되어야 한다.
+- 유형은 `direct` (1:1 매핑) 또는 `cross-cutting` (1:N 매핑)이다.
+- `UNASSIGNED` 항목이 1개라도 있으면 생성 서브에이전트 실행을 금지한다 (HARD GATE).
+- cross-cutting 소스에는 반드시 Cross-Cutting Distribution 섹션이 동반되어야 한다.
+
+### Cross-Cutting Distribution (contract packet 필수 섹션, cross-cutting 존재 시)
+
+Source Coverage Manifest에 `cross-cutting` 유형이 있으면, 각 cross-cutting 소스에 대해 배포 지시를 작성해야 한다.
+
+형식:
+
+```markdown
+## Cross-Cutting Distribution
+
+### REFACTORING.md
+- 대상: harness-fe-testing, harness-fe-fsd
+- 배포 방식: 리팩토링 안전 체크리스트를 각 하네스의 검증 기준에 추가
+- 배포 내용: rename/move 안전 규칙, 참조 무결성 확인 절차
+
+### UX_REVIEW.md
+- 대상: harness-fe-fsd, harness-fe-react-hook-form
+- 배포 방식: UX 일관성 기준을 검증 기준에 추가
+- 배포 내용: 동적 필드 UX 표준, 접근성 체크리스트
+```
+
+규칙:
+- 각 cross-cutting 소스에 대해 대상, 배포 방식, 배포 내용을 명시한다.
+- 생성 서브에이전트는 이 지시에 따라 각 대상 하네스에 내용을 반영한다.
+- 반영 후 세션 notes에 배포 로그를 기록한다.
+
 ## 예시 코드 규칙
 
 - 예시 코드는 Markdown 코드 블록으로 제시한다.

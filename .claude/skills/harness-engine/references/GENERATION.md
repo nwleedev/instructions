@@ -24,6 +24,8 @@
 - `stack_reference_path`: stack seed reference 문서 경로 (또는 "없음")
 - `stack_required_checks`: contract packet에 기록된 stack required checks
 - `engine_followup_required`: `yes` 또는 `no`
+- `coverage_manifest`: Source Coverage Manifest (소스 파일 → 대상 하네스 매핑 테이블)
+- `cross_cutting_distribution`: Cross-Cutting Distribution 지시 (또는 "없음")
 
 ## 실행 절차
 
@@ -48,6 +50,15 @@
 - 최소 드라이런 기준
 
 대표 분류에 adapter가 없어서 `execution_path`가 `engine-asset bootstrap`인 경우에는, 본 에이전트가 전달한 `coverage_contract`와 `user_decisions`를 어댑터 초안의 기준으로 사용한다.
+
+### 2.5. Source Coverage Manifest 및 Cross-Cutting Distribution 확인
+
+전달받은 `coverage_manifest`를 읽고 다음을 확인한다:
+- 현재 생성할 하네스가 manifest의 대상 하네스에 포함되어 있는지
+- cross-cutting 소스가 있으면 `cross_cutting_distribution`의 배포 지시를 확인한다
+- 배포 지시에 따라 cross-cutting 내용을 해당 하네스의 적절한 섹션에 반영할 준비를 한다
+
+반영 대상: 핵심 규칙, 안티패턴, 검증 기준 중 배포 지시에서 지정한 섹션.
 
 ### 3. project contract packet 로드
 
@@ -123,7 +134,7 @@
 - 5건 이상 필요하면 배치를 나누어 실행한다.
 - 각 검색의 max_results는 3~5건으로 제한한다.
 - 검색 결과 중 무관한 대용량 항목(PDF, 코드 파일, vocab 파일 등)은 즉시 제외한다.
-- 각 배치 완료 후 핵심 발견을 세션 RESEARCH.md에 기록한 뒤 다음 배치를 진행한다.
+- 각 배치 완료 후 핵심 발견을 세션 notes(`<session_path>/notes/`)에 기록한 뒤 다음 배치를 진행한다.
 - 검색 대상 언어/지역이 다른 경우 언어별로 배치를 분리한다.
 
 #### 도메인 탐색 서브에이전트 실행 (선택)
@@ -272,6 +283,8 @@
 9. **공통 phase 사용 상태**: common research phase와 bootstrap phase를 어떻게 적용했는지
 10. **engine_followup_required**: `yes/no`와 사유
 11. **미충족 항목**: 조사나 작성에서 충족하지 못한 항목 (있으면)
+12. **Source Coverage Manifest 준수 상태**: manifest의 대상 하네스와 실제 생성 하네스의 일치 여부
+13. **Cross-cutting 배포 상태**: cross-cutting 소스의 배포 지시 이행 여부와 배포 로그 경로
 
 ## 임시 파일 규칙
 
