@@ -380,9 +380,13 @@ psd
 thumb
 sketch
 
-# Codex, Claude Code Sessions
-store/
+# Claude Code Sessions
+/.claude/sessions/
 browser-automation/
+temps/
+
+# Legacy
+/store/
 
 # Skills Worktrees
 /.claude/worktrees/
