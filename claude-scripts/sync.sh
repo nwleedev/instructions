@@ -33,6 +33,7 @@ usage() {
 비관리 대상:
   - .claude/sessions/*
   - .claude/skills/harness-fe-* (프로젝트별 도메인 하네스)
+  - .claude/skills/use-repo-skills.md (프로젝트별 스킬 목록)
   - .claude/plans/*
   - .claude/agent-memory/* (에이전트별 학습 진도)
   - temps/*

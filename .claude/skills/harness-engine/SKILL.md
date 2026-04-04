@@ -42,7 +42,7 @@ user-invocable: true
 13. **하네스 생성 서브에이전트를 실행한다.**
 14. **검증 서브에이전트를 실행한다.**
 15. 검증 결과를 contract packet에 먼저 반영한 뒤 하네스를 보강한다.
-16. 새 하네스 스킬을 만들었다면 `.claude/skills/use-skills.md`의 Available Skills 목록을 갱신한다.
+16. 새 하네스 스킬을 만들었다면 `.claude/skills/use-repo-skills.md`의 도메인 하네스 목록을 갱신한다. (use-repo-skills.md가 없으면 생성한다.)
 17. 세션 기록(SESSION.md)을 갱신한다.
 
 ## 작업 시작 전 확인
@@ -316,7 +316,7 @@ stack seed reference: {stack_reference_path 또는 "없음"}
 - SESSION.md: 작업 상태, 결정 사항, 진행 로그 갱신
 - contract packet: `.claude/sessions/<session_id>/notes/contracts/` 또는 `temps/contracts/`에 저장
 - validation artifact: `.claude/sessions/<session_id>/notes/validation/` 또는 `temps/validation/`에 저장
-- `.claude/skills/use-skills.md`: 새 하네스 스킬 생성 시 Available Skills 목록 갱신
+- `.claude/skills/use-repo-skills.md`: 새 하네스 스킬 생성 시 도메인 하네스 목록 갱신
 - 다른 프로젝트 환류 요청이 있으면 change request packet의 핵심 필드를 DECISIONS 또는 RESEARCH에 남긴다.
 - 실제 프로젝트에서 수집한 보고서가 있으면 원문 전체 대신 핵심 필드만 추려 upstream 판단 자료로 사용한다.
 - stack이 감지된 작업이었다면 `engine_followup_required`와 stack required checks가 validation artifact에 남는지 확인한다.
@@ -327,7 +327,7 @@ stack seed reference: {stack_reference_path 또는 "없음"}
 - “충분한 하네스”는 최소 계약과 검증 통과를 모두 만족하는 경우만 의미한다.
 - 부족한 섹션만 보강한다.
 - 새 하네스는 기존 하네스로는 반복적으로 커버되지 않는 경우에만 만든다.
-- 새 하네스를 만들었다면 discovery를 위해 `.claude/skills/use-skills.md`의 Available Skills 목록 갱신까지 완료해야 한다.
+- 새 하네스를 만들었다면 discovery를 위해 `.claude/skills/use-repo-skills.md`의 도메인 하네스 목록 갱신까지 완료해야 한다.
 - 기존 하네스를 보강할 때도 portable core와 local evidence를 섞지 않는다.
 
 ## 금지

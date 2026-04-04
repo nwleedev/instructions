@@ -12,11 +12,12 @@ user-invocable: true
 
 ## HARD RULE: Always Check Skills
 
-모든 작업을 시작하기 전에 `.claude/skills/` 폴더의 사용 가능한 스킬을 확인한다.
+모든 작업을 시작하기 전에 아래 Available Skills와 `use-repo-skills.md`(있으면)를 확인한다.
 
 - 적용 가능성이 1%라도 있으면 반드시 해당 스킬을 invoke한다.
 - "아마 필요 없을 것 같다"는 판단으로 스킬 확인을 건너뛰지 않는다.
 - 스킬이 적용 가능한지 불확실하면 invoke한다.
+- `use-repo-skills.md`가 SessionStart 훅으로 함께 주입된다. 프로젝트별 도메인 스킬은 그 파일에 나열되어 있다.
 
 ---
 
@@ -49,16 +50,6 @@ user-invocable: true
 
 ### 오류 시 자동 활성화 (description 매칭)
 - **failure-response** — 실패 대응, blocked 상태, 목표 불변성
-
-### 도메인 하네스 (description 매칭 자동 활성화)
-- **harness-fe-tanstack-query** — TanStack Query 서버 상태 관리
-- **harness-fe-react-hook-form** — React Hook Form 폼 관리
-- **harness-fe-react-router** — React Router 라우팅
-- **harness-fe-zustand** — Zustand 클라이언트 상태 관리
-- **harness-fe-fsd** — Feature-Sliced Design 아키텍처
-- **harness-fe-useeffect-props** — useEffect Props 패턴
-- **harness-fe-testing** — 프론트엔드 테스트
-- **harness-fe-test-antipatterns** — 프론트엔드 테스트 안티패턴
 
 ### 학습
 - **deep-study** — 도메인 심층 학습 (밑바닥부터 체계적 강의)

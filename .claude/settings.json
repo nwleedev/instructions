@@ -12,7 +12,7 @@
           },
           {
             "type": "command",
-            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true",
+            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true; cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-repo-skills.md\" 2>/dev/null || true",
             "timeout": 10
           }
         ]
@@ -27,7 +27,7 @@
           },
           {
             "type": "command",
-            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true",
+            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true; cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-repo-skills.md\" 2>/dev/null || true",
             "timeout": 10
           }
         ]
