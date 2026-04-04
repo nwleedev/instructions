@@ -380,8 +380,9 @@ psd
 thumb
 sketch
 
-# Claude Code Sessions
+# Claude Code
 /.claude/sessions/
+/.claude/plans/
 browser-automation/
 temps/
 
@@ -390,4 +391,3 @@ temps/
 
 # Skills Worktrees
 /.claude/worktrees/
-/.agents/worktrees/

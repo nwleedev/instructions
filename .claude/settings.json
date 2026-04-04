@@ -1,0 +1,49 @@
+{
+  "plansDirectory": "./.claude/plans",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SESSION_FILE=\"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\"; if [ -n \"$SESSION_ID\" ] && [ -f \"$SESSION_FILE\" ]; then echo '## Session State (auto-injected after compaction)' && cat \"$SESSION_FILE\"; fi",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SESSION_FILE=\"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\"; if [ -n \"$SESSION_ID\" ] && [ -f \"$SESSION_FILE\" ]; then echo '## Session State (auto-injected)' && cat \"$SESSION_FILE\"; else echo '## Session Preflight' && echo '- SESSION_ID 환경변수를 확인하세요' && echo '- .claude/plans/ 계획 파일을 확인하세요'; fi",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "cat \"$CLAUDE_PROJECT_DIR/.claude/skills/use-skills.md\" 2>/dev/null || true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -n \"$SESSION_ID\" ] && [ -f \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" ]; then mkdir -p \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/contexts\" && cp \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/contexts/CONTEXT-$(date +%Y%m%d-%H%M)-session-end.md\"; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

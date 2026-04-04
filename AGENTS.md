@@ -1,144 +1,30 @@
-# 지시사항 문서
+# Instructions
 
-본 문서는 이 레포지토리에서 Codex, Claude가 작업할 때 따라야 할 표준 지시사항을 제공합니다. 사람을 위한 README와 달리, 에이전트가 즉시 실행 가능한 명령·규칙·검증 절차를 중심으로 기술합니다.
+본 문서는 이 레포지토리에서 AI 에이전트가 작업할 때 따라야 할 진입점이다.
+상세 규칙은 CLAUDE.md의 @참조를 통해 자동 주입된다.
 
-**Codex는 Codex CLI를 지칭합니다. Claude는 Claude Code를 지칭합니다.**
+## Entry Point
 
-**모든 작업에 대해서 공통적으로 적용해야 하는 규칙에 대해서는 `instructions/INDEX.md` 파일을 반드시 따른다.**
+- 루트 진입점: `AGENTS.md` (CLAUDE.md @참조로 자동 주입)
+- 핵심 규칙: `.claude/skills/core-rules.md` (CLAUDE.md @참조로 자동 주입)
+- 실패 대응: `.claude/skills/failure-response.md` (오류 시 description 매칭 자동 활성화)
+- 세션 관리: `.claude/skills/session-management.md` (SessionStart 훅으로 자동 주입)
+- 스킬 사용: `.claude/skills/use-skills.md` (SessionStart 훅으로 자동 주입)
 
-Codex, Claude를 처음 실행할 때 & 컨텍스트가 압축되었을 때에도 AGENTS.md, `instructions/INDEX.md` 파일을 **반드시** 읽고 어떻게 작업해야 하는지 파악한다.
+## Domain Harness Skills
 
-## 진입점 규칙
+도메인별 하네스는 `.claude/skills/harness-*.md` 스킬로 관리된다.
 
-- 이 저장소의 루트 진입점은 `AGENTS.md`다.
-- `CLAUDE.md`는 별도 규칙 저장소가 아니라, `AGENTS.md`를 가리키는 얇은 shim으로 유지한다.
-- 도구별 예외 규칙이 정말 필요할 때만 `AGENTS.md`와 별도로 분기하고, 가능한 한 공통 규칙은 `AGENTS.md`와 `instructions/*`에만 둔다.
+- 작업 유형에 따라 description 필드 매칭으로 자동 활성화된다.
+- 자동 활성화가 안 되면 `/harness-<domain>` 명령으로 수동 활성화할 수 있다.
+- 사용 가능한 하네스는 `.claude/skills/` 폴더를 확인한다.
 
-## 작업 분야 하네스 선택
+## Portable Core
 
-모든 작업은 아래 순서로 필요한 하네스를 추가 적용한다.
+다른 프로젝트로 배포되는 파일 (claude-scripts/sync.sh):
+- `.claude/skills/core-rules.md`, `failure-response.md`, `session-management.md`, `use-skills.md`
+- AGENTS.md, CLAUDE.md (템플릿), claude-scripts/*
 
-1. 공통 필독
-   - `AGENTS.md`
-   - `instructions/INDEX.md`
-   - `instructions/SESSIONS.md`
-   - `instructions/FAILURE.md`
-2. 프로젝트 로컬 작업 분야 하네스 확인
-   - 현재 프로젝트에 `instructions/<task_type>/INDEX.md` 같은 로컬 작업 분야 하네스가 있으면 그것과 그것이 참조하는 상세 지침까지 읽는다.
-     - 예를 들어 프론트엔드 작업의 경우에는 `instructions/frontend/INDEX.md` 또는 `instructions/<frontend_like>/INDEX.md` 파일과 해당 파일이 가리키는 상세 지침까지 읽는다.
-   - 로컬 하네스가 추가로 읽으라고 지시하는 아키텍처, 안티패턴, 검증, 템플릿 문서를 이어서 읽는다.
-3. 로컬 하네스가 없으면 생성 또는 보강
-   - 필요한 작업 분야 하네스가 없으면 `harness-engine` 스킬로 생성하거나 보강한다.
-
-규칙:
-
-- 프로젝트별 `instructions/<task_type>/*` 하네스는 portable core가 아닌 repo-local 상세 하네스로 취급한다. 다른 프로젝트의 기본 복사 범위로 가정하지 않는다.
-- 사용자가 해당 도메인에 익숙하지 않다고 명시했거나 프로젝트 분야가 낯설면, 주 작업 분야 하네스만 단독 적용하지 말고 `instructions/learning-mode/*`도 함께 적용한다.
-- 필요한 로컬 하네스가 없으면 `harness-engine`으로 생성한다.
-- 기존 로컬 하네스로 설명 가능한 작업이면 새 작업 분야를 만들지 않는다.
-- 기존 로컬 하네스로 설명되지 않는 반복 작업만 새 하네스 후보로 본다.
-
-## 세션
-
-Codex, Claude에서 작업을 진행할 때 장기간 작업 맥락 및 흐름, 대화 맥락 및 흐름의 유지를 하기 위해 **세션**이라는 개념을 사용한다.
-
-**세션의 정의가 무엇인지, 각 세션 파일이 어떤 역할을 하는지에 대해서는 `instructions/SESSIONS.md` 파일을 반드시 참고한다.**
-
-작업을 시작할 때 그리고 끝날 때 해당 파일에 있는 규칙대로 세션을 기록한다.
-
-세션 기록 강행 규칙:
-
-- 세션 기록은 권장이 아니라 작업 게이트다.
-- 실질적인 탐색, 조사, 구현, 검증을 시작하기 전에는 다음 preflight를 끝낸다.
-  - 현재 세션과 세션 디렉터리를 확인한다.
-  - `PLANS.md`를 다시 읽고 작업 시작 가능 여부를 판정한다.
-  - `TICKETS.md` 상단의 `Original Goal`, `Current Best Next Ticket`, `Why This Advances The Original Goal`, `Deferred But Important`를 확인하거나 보강한다.
-  - 현재 턴의 작업을 `TICKETS.md`와 `PROGRESS.md`에 시작 상태로 기록한다.
-- `harness-engine`으로 하네스를 생성/보강/감사했다면, 다음 구현 티켓을 열기 전에 세션 validation artifact를 남긴다.
-- 사용자가 새 프롬프트를 주거나 `PLANS.md`에 내용을 추가하면, 기존 판정을 재사용하지 않고 `PLANS.md`를 다시 읽어 추가 정보 필요 여부를 재판정한다.
-- 작업 중 세션 기록 누락을 발견하면, 본 작업보다 먼저 세션 파일을 보정한다.
-- 사용자에게 완료를 보고하기 전에는 다음 postflight를 끝낸다.
-  - `TICKETS.md` 상태와 다음 티켓을 갱신한다.
-  - `PROGRESS.md`의 `Done`, `In progress`, `Blocked`, `Next`를 갱신한다.
-  - 필요 시 `DECISIONS.md`, `RESEARCH.md`를 반영한다.
-- 종료 기록이 비어 있으면 완료, 해결, 끝남처럼 작업이 종료된 것처럼 보고하지 않는다.
-
-## 실패 대응 원칙
-
-**Codex, Claude가 특정 작업에 실패했을 때 다음과 같은 상황을 방지하기 위함입니다.**
-
-- 사용자가 제시한 요구사항을 무시하고 사용자에게는 작업이 끝났다고 보고하는 상황
-- 문제의 원인을 정확히 파악하지 않고 문제를 덮어쓰는 방식으로 개발해서 기술 부채 유발
-
-**문제를 해결하지 못했다고 해서 문제를 숨기거나 회피하는 방식으로 작업을 완료 처리하는 대신 `instructions/FAILURE.md` 파일을 참고한다.**
-
-## 레포지터리 추가 지침
-
-- `instructions/REPOSITORY.md` 파일이 없으면 지나친다.
-- `instructions/REPOSITORY.md` 파일이 있으면 반드시 내용을 파악한다.
-  - **해당 파일은 각 레포지터리마다 추가적으로 세팅하는 지침이기 때문에 각 레포지터리마다 추가된 지시사항을 반드시 파악하고 작업에 반영한다.**
-
-## 주석
-
-- 코드 추가 또는 수정 시 처음 보는 사람이 코드의 동작과 설계 의도를 이해할 수 있도록 필요한 주석을 유지한다.
-- 주석은 코드의 동작 설명뿐 아니라 설계 의도, 제약 조건, 입력 가정 등 유지보수에 필요한 정보를 제공해야 한다.
-
-**주석에 대한 상세 지침은 `instructions/COMMENTS.md` 파일을 참고한다.**
-
-## 임시 파일
-
-- PC 루트 폴더, "/tmp" 폴더를 사용하지 않는다. 루트 디렉토리에서 파일을 잘못 사용하면 시스템에 문제가 발생할 수 있다.
-
-## AI 행동 품질 규칙
-
-AI가 작업할 때 어떤 태도를 지녀야 하는지 작성한 것이다.
-
-**상세 지침은 `instructions/AI-BEHAVIOR.md` 파일을 참고한다.**
-
-핵심 요약은 다음과 같다.
-
-- **출력 스타일**: 사람에게 쓰는 것이지 콘솔 로그가 아니다. 산문 중심, 완전한 문장, 전문 용어 풀어 설명.
-- **작업 완료 전 검증 강제**: 완료 보고 전에 반드시 실제 동작 검증. 검증할 수 없으면 명시.
-- **결과 충실 보고**: 테스트 실패를 숨기거나 성공으로 포장 금지. 정확한 보고가 목표.
-- **적극적 협력**: 오해 발견 시 알려주고, 지시만 따르는 것이 아닌 협력자로 행동.
-- **비사소한 구현의 독립 검증**: 3+ 파일 수정 시 별도 검증 에이전트로 독립 확인.
-
-## 도구 사용 안전 규칙
-
-AI가 도구를 사용할 때 발생할 수 있는 무성 실패를 방지하기 위한 것이다.
-
-**상세 지침은 `instructions/TOOL-SAFETY.md` 파일을 참고한다.**
-
-핵심 요약:
-
-- **컨텍스트 부식 인식**: 10턴 이상 또는 압축 후에는 편집 대상 파일을 반드시 다시 읽는다.
-- **편집 무결성 주기**: 편집 전 읽기, 편집 후 확인 읽기를 반드시 수행한다.
-- **리팩터링 검색 완전성**: 이름 변경 시 단일 grep으로 끝내지 않고 범주별로 별도 검색한다.
-- **도구 결과 절삭 인식**: 결과가 의심스럽게 적으면 범위를 좁혀 재실행한다.
-
-## 이식성과 환류
-
-- 여러 프로젝트로 복사해서 쓰는 하네스는 `portable core`, `project adapter`, `local evidence pack`을 분리해 관리한다.
-- 프로젝트마다 달라지는 경로, 검증 명령, 예시, 과거 증빙은 코어 규칙으로 승격하지 않는다.
-- 다른 프로젝트에서 발견한 문제나 요구사항을 이 저장소로 되돌릴 때는 source-side 메타 문서인 `instructions/harness/PORTABILITY.md`의 change request packet 형식을 따른다. (이 파일은 원본 하네스 저장소에만 존재하며 sync-harness.sh 배포 범위에 포함되지 않는다.)
-
-## 하네스 문제 자동 보고
-
-- 실제 프로젝트에서 작업 중 하네스 계층(`AGENTS.md`, `instructions/*`, `harness-engine`, 세션 규칙)에 문제가 발생하면, 에이전트는 먼저 구조화 리포트를 작성한다.
-- 기본 템플릿은 `instructions/templates/HARNESS-ISSUE-REPORT-TEMPLATE.md`를 사용한다.
-- 기본 저장 경로는 `store/<session_id>/temps/harness-issues/`다. 세션 디렉터리가 없는 환경에서는 프로젝트의 `temps/harness-issues/`를 사용한다.
-- 보고서에는 최소한 사용자 목표, 읽은 규칙 파일, 실제 실패 동작, 기대 동작, 재현 절차, 로컬 제약, 일반화 후보를 포함한다.
-- 보고서 작성 없이 코어 하네스 문제를 구두 설명만 남기고 종료하지 않는다.
-
-<!-- HARNESS-SYNC-CORE-END -->
-<!-- HARNESS-SYNC-PROJECT-START -->
-
-## 프로젝트 로컬 하네스
-
-이 저장소에 있는 아래 하네스는 repo-local 상세 하네스다. portable core가 아니며, 다른 프로젝트의 기본 복사 범위로 가정하지 않는다.
-
-- `instructions/frontend/*`
-- `instructions/research/*`
-- `instructions/learning-mode/*`
-- `instructions/source-analysis/*`
-- `instructions/operator-stack/*`
+프로젝트별 로컬 파일 (배포 제외):
+- `.claude/skills/harness-*.md` (도메인 하네스)
+- `.claude/settings.json`, `.claude/sessions/`
