@@ -1,6 +1,6 @@
 ---
 name: session-management
-description: "세션 시작, 세션 종료, SESSION.md, contexts, preflight, postflight, 세션 관리, 세션 디렉터리, 80줄 제한, 컨텍스트 압축 후 재개 — 세션 라이프사이클 규칙. Use when starting, resuming, or ending work sessions."
+description: "세션 시작, 세션 종료, SESSION.md, contexts, 스냅샷, 세션 관리, 세션 디렉터리, 컨텍스트 압축 후 재개 — 세션 라이프사이클 규칙. Use when starting, resuming, or ending work sessions."
 user-invocable: true
 ---
 
@@ -28,63 +28,54 @@ SessionStart 훅으로 자동 주입된다.
 
 ---
 
-## SESSION.md Overview
+## Turn Snapshot (HARD RULE)
 
-- 세션 상태 파일 경로: `.claude/sessions/<session_id>/SESSION.md`
-- SessionStart 훅이 startup, resume, compact, clear 시 `$SESSION_ID` 기반으로 자동 주입한다.
-- **매 턴 전체 덮어쓰기**한다. append 금지. **80줄 제한**.
-- 덮어쓰기 전에 `.claude/sessions/<session_id>/contexts/CONTEXT-<YYYYMMDD>-<HHMM>-<title>.md`로 스냅샷 저장.
+**매 턴 종료 시 반드시 `/session-snapshot` 스킬을 호출하여 스냅샷을 생성한다.**
 
----
+### 턴 시작 시
 
-## Session Lifecycle
+1. SessionStart 훅이 SESSION.md를 자동 주입한다 (별도 행동 불필요).
+2. SESSION.md의 최근 스냅샷을 읽고 이전 맥락을 파악한다.
+3. `.claude/plans/` 계획 파일을 확인한다.
 
-### Turn Start (Preflight)
-1. `.claude/sessions/<session_id>/SESSION.md`를 읽고 현재 상태를 확인한다.
-2. `.claude/plans/` 계획 파일을 확인한다.
-3. 현재 작업할 티켓을 SESSION.md의 Current Ticket에 기록한다.
-4. SESSION.md를 덮어쓰기 전에 contexts/로 스냅샷을 저장한다.
+### 턴 종료 시
 
-### Turn End (Postflight)
-1. SESSION.md를 최신 상태로 덮어쓴다 (Completed, Next, Key Decisions 갱신).
-2. Recovery Info를 갱신한다.
-3. 종료 기록이 비어 있으면 완료 보고하지 않는다.
+1. 사용자에게 응답을 보내기 직전에 `/session-snapshot` 스킬을 호출한다.
+2. 스냅샷 title은 이번 턴의 핵심 작업을 짧게 요약한 영문 제목이다.
+3. **이 단계를 건너뛰지 않는다.** "단순한 질문이라 불필요하다"는 합리화를 하지 않는다.
 
-### After Compaction
-- SessionStart 훅이 SESSION.md를 자동으로 컨텍스트에 재주입한다.
-- Recovery Info 섹션만으로 즉시 재개 가능해야 한다.
+### 스냅샷 생략 가능한 경우 (예외)
+
+- 사용자가 인터넷 연결 확인만 요청한 경우
+- 사용자가 단순 질문(예/아니오)만 한 경우
+- 세션 ID가 설정되지 않은 경우
 
 ---
 
-## SESSION.md Format
+## SESSION.md 구조
+
+SESSION.md는 스냅샷 요약이 **최신순으로 누적되는 로그**이다.
 
 ```markdown
-# Session State
-<!-- 매 턴 전체 덮어쓰기. append 금지. 80줄 제한. -->
+# Session Log
 
 ## Goal
-(1-2문장: 사용자의 목표)
+(세션의 전체 목표 1-2문장)
 
-## Current Ticket
-(지금 작업 중인 것 - 1-2문장)
+## Active Decisions
+- (현재 유효한 결정 목록, 각 1줄. 무효화되면 제거)
 
-## Completed
-- (완료된 티켓 제목만)
+## Snapshots (newest first)
 
-## Blocked
-- (차단 사항과 이유 - 각 1줄)
-
-## Next
-- (현재 티켓 완료 후 다음 행동)
-
-## Key Decisions
-- (최근 결정 최대 5개, 각 1줄. 오래된 것은 탈락)
-
-## Recovery Info
-- Working on: (파일 경로, 함수명)
-- Last verified: (마지막으로 확인한 동작 상태)
-- Next step: (다음에 실행할 정확한 명령 또는 편집)
+### <YYYY-MM-DD HH:MM> — <title>
+- Done: <완료한 작업>
+- Files: <변경 파일>
+- Next: <다음 작업>
 ```
+
+- 각 스냅샷 요약은 3-5줄.
+- 80줄 초과 시 오래된 스냅샷부터 삭제 (contexts/에 전체 보존됨).
+- Goal 섹션은 세션 시작 시 한 번 설정하고, 목표가 변경될 때만 갱신한다.
 
 ---
 
@@ -92,8 +83,8 @@ SessionStart 훅으로 자동 주입된다.
 
 ```
 .claude/sessions/<session_id>/
-  SESSION.md          # 현재 세션 상태 (80줄 제한, 매 턴 덮어쓰기)
-  contexts/           # SESSION.md 스냅샷 이력
+  SESSION.md          # 스냅샷 요약 누적 로그
+  contexts/           # 스냅샷 전체 파일 이력
   notes/              # 상세 리서치, 조사 메모, 중간 산출물
 ```
 
@@ -104,25 +95,6 @@ SessionStart 훅으로 자동 주입된다.
 - 계획 파일의 유일한 위치는 `.claude/plans/`이다 (Claude Code 네이티브).
 - 별도 PLANS.md 파일을 만들지 않는다.
 - 목표, 범위, 완료 기준은 Claude Code Plan 파일에 기록한다.
-- 사용자도 직접 수정 가능하다 (일반 마크다운 파일).
-- 계획이 불완전하면 사용자에게 선택지를 제시하고 대기한다.
-
----
-
-## contexts/ Folder
-
-- SESSION.md 덮어쓰기 전에 스냅샷을 저장하는 이력 폴더이다.
-- 파일명: `CONTEXT-<YYYYMMDD>-<HHMM>-<title>.md`
-- SessionEnd 훅이 세션 종료 시 자동으로 스냅샷을 저장한다.
-
----
-
-## 80-Line Enforcement
-
-- SESSION.md가 80줄을 초과하면:
-  1. Completed 리스트에서 오래된 항목을 삭제한다.
-  2. Key Decisions에서 오래된 결정을 삭제한다.
-  3. 삭제된 내용은 contexts/ 스냅샷에 보존되어 있다.
 
 ---
 

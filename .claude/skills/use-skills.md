@@ -41,8 +41,11 @@ user-invocable: true
 - **core-rules** — 모든 작업에 적용되는 핵심 규칙 (언어, 보안, 도구 안전, 출력 스타일, 검증, 주석 등)
 
 ### SessionStart 자동 주입
-- **session-management** — 세션 라이프사이클 (SESSION.md 관리, preflight/postflight)
+- **session-management** — 세션 라이프사이클 (SESSION.md 관리, 턴 스냅샷 HARD RULE)
 - **use-skills** — 이 스킬 자체
+
+### 매 턴 호출 (session-management HARD RULE)
+- **session-snapshot** — 턴 종료 시 contexts/ 스냅샷 생성 + SESSION.md 요약 추가
 
 ### 오류 시 자동 활성화 (description 매칭)
 - **failure-response** — 실패 대응, blocked 상태, 목표 불변성

@@ -25,6 +25,7 @@ usage() {
   - .claude/skills/session-management.md
   - .claude/skills/use-skills.md
   - .claude/skills/deep-study.md
+  - .claude/skills/session-snapshot.md
   - .claude/settings.json
   - .claude/skills/harness-engine/*
   - .claude/agents/*
@@ -71,7 +72,7 @@ collect_source_paths() {
     fi
 
     # portable core skills
-    for skill in core-rules.md failure-response.md session-management.md use-skills.md deep-study.md; do
+    for skill in core-rules.md failure-response.md session-management.md use-skills.md deep-study.md session-snapshot.md; do
       [ -f ".claude/skills/$skill" ] && printf '%s\n' ".claude/skills/$skill"
     done
 

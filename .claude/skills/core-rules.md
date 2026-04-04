@@ -74,8 +74,17 @@ user-invocable: true
 
 ## Temporary Files
 
-- PC 루트 폴더, "/tmp" 폴더를 사용하지 않는다.
-- 임시 파일은 `.claude/sessions/<session_id>/notes/` 또는 프로젝트 내 `temps/` 폴더에 저장한다.
+임시 파일 저장 규칙:
+
+- 세션 관련 파일(조사 메모, 이슈 보고서, contract packet 등): `.claude/sessions/<session_id>/notes/`
+- 세션과 무관한 임시 파일: 프로젝트 내 `temps/` 폴더
+
+금지 경로:
+- `/tmp`, `/private/tmp`: macOS sandbox의 `com.apple.provenance` xattr 충돌으로 쓰기 실패 가능. sandbox 기본 `allowWrite` 범위에도 포함되지 않음.
+- PC 루트 폴더 (`/`, `~`)
+- Claude Code 내부 시스템 경로(`/tmp/claude-<uid>/`)는 엔진 자체가 사용하므로 제어 불가. 이 경로에 직접 파일을 만들지 않는다.
+
+`temps/` 폴더가 없으면 생성한다. `.gitignore`에 이미 포함되어 있다.
 
 ## Domain Harness Skills
 
