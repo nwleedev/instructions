@@ -19,12 +19,22 @@
 - 자동 활성화가 안 되면 `/harness-<domain>` 명령으로 수동 활성화할 수 있다.
 - 사용 가능한 하네스는 `.claude/skills/` 폴더를 확인한다.
 
+## Custom Agents
+
+`.claude/agents/` 디렉터리에 정의된 전용 에이전트:
+
+- `work-reviewer` — 작업 완료 후 독립 품질 검토 (읽기 전용, core-rules의 Independent Verification에서 자동 호출)
+- `domain-tutor` — 대화형 도메인 튜터 (deep-study 스킬 + memory:project로 학습 진도 유지)
+- `harness-researcher` — harness-engine의 도메인 조사 서브에이전트
+
 ## Portable Core
 
 다른 프로젝트로 배포되는 파일 (claude-scripts/sync.sh):
-- `.claude/skills/core-rules.md`, `failure-response.md`, `session-management.md`, `use-skills.md`
+- `.claude/skills/core-rules.md`, `failure-response.md`, `session-management.md`, `use-skills.md`, `deep-study.md`
+- `.claude/agents/*` (work-reviewer, domain-tutor, harness-researcher)
 - AGENTS.md, CLAUDE.md (템플릿), claude-scripts/*
 
 프로젝트별 로컬 파일 (배포 제외):
 - `.claude/skills/harness-*.md` (도메인 하네스)
 - `.claude/settings.json`, `.claude/sessions/`
+- `.claude/agent-memory/` (에이전트별 학습 진도)

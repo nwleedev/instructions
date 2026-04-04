@@ -24,13 +24,16 @@ usage() {
   - .claude/skills/failure-response.md
   - .claude/skills/session-management.md
   - .claude/skills/use-skills.md
+  - .claude/skills/deep-study.md
   - .claude/settings.json
   - .claude/skills/harness-engine/*
+  - .claude/agents/*
 
 비관리 대상:
   - .claude/sessions/*
   - .claude/skills/harness-fe-* (프로젝트별 도메인 하네스)
   - .claude/plans/*
+  - .claude/agent-memory/* (에이전트별 학습 진도)
   - temps/*
 EOF
 }
@@ -68,7 +71,7 @@ collect_source_paths() {
     fi
 
     # portable core skills
-    for skill in core-rules.md failure-response.md session-management.md use-skills.md; do
+    for skill in core-rules.md failure-response.md session-management.md use-skills.md deep-study.md; do
       [ -f ".claude/skills/$skill" ] && printf '%s\n' ".claude/skills/$skill"
     done
 
@@ -78,6 +81,11 @@ collect_source_paths() {
     # harness-engine
     if [ -d ".claude/skills/harness-engine" ]; then
       find ".claude/skills/harness-engine" -type f | LC_ALL=C sort
+    fi
+
+    # custom agents
+    if [ -d ".claude/agents" ]; then
+      find ".claude/agents" -type f | LC_ALL=C sort
     fi
   ) | sed 's#^\./##' | awk 'NF && !seen[$0]++'
 }

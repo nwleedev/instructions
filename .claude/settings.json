@@ -44,6 +44,29 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -n \"$SESSION_ID\" ] && [ -f \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" ]; then cp \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md.bak\"; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto|manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -n \"$SESSION_ID\" ] && [ -f \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" ]; then mkdir -p \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/contexts\" && cp \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/SESSION.md\" \"$CLAUDE_PROJECT_DIR/.claude/sessions/$SESSION_ID/contexts/CONTEXT-$(date +%Y%m%d-%H%M)-pre-compact.md\"; fi",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

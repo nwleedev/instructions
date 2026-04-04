@@ -57,8 +57,16 @@ user-invocable: true
 - **harness-fe-testing** — 프론트엔드 테스트
 - **harness-fe-test-antipatterns** — 프론트엔드 테스트 안티패턴
 
+### 학습
+- **deep-study** — 도메인 심층 학습 (밑바닥부터 체계적 강의)
+
 ### 하네스 생성 엔진
 - **harness-engine** — 새 도메인 하네스 스킬 생성/보강
+
+### 커스텀 에이전트 (.claude/agents/)
+- **work-reviewer** — 작업 완료 후 독립 품질 검토 (읽기 전용)
+- **domain-tutor** — 대화형 도메인 튜터 (deep-study 스킬 + memory)
+- **harness-researcher** — 하네스 생성용 도메인 조사 에이전트
 
 ---
 

@@ -202,6 +202,11 @@ Agent tool 호출:
   subagent_type: general-purpose
   isolation: worktree
   run_in_background: false (포그라운드)
+
+또는 커스텀 에이전트 사용 (권장):
+  .claude/agents/harness-researcher/AGENT.md
+  - model: sonnet, effort: high
+  - 도메인 조사와 하네스 생성에 최적화된 도구/권한 설정
 ```
 
 ### 서브에이전트에 전달할 프롬프트 구성
@@ -262,6 +267,10 @@ Agent tool 호출:
   subagent_type: general-purpose
   isolation: 없음 (worktree 미사용 — 읽기만 수행)
   run_in_background: false (포그라운드)
+
+또는 커스텀 에이전트 사용 (권장):
+  .claude/agents/harness-researcher/AGENT.md
+  - 검증 시에도 동일 에이전트 사용 (읽기 전용 작업)
 ```
 
 ### 검증 서브에이전트 프롬프트
@@ -349,3 +358,4 @@ stack seed reference: {stack_reference_path 또는 "없음"}
 - 스택 seed 지침: `references/stacks/<stack>.md`
 - example pack: `references/examples/<task_type>/*`
 - contract packet은 `.claude/sessions/<session_id>/notes/contracts/`에 직접 작성한다.
+- 커스텀 리서치 에이전트: `.claude/agents/harness-researcher/AGENT.md`

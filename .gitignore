@@ -383,6 +383,7 @@ sketch
 # Claude Code
 /.claude/sessions/
 /.claude/plans/
+/.claude/agent-memory/
 browser-automation/
 temps/
 
