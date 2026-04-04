@@ -24,7 +24,12 @@ permissionMode: plan
    - 관련 문서 업데이트가 필요한데 빠졌는지
    - import/export 체인이 깨지지 않았는지
    - 리팩토링 시 모든 참조가 갱신되었는지
-5. **규칙 준수 확인**: 프로젝트의 core-rules, 활성 하네스 스킬의 규칙을 준수했는지 확인한다.
+5. **하네스 스킬 기반 도메인 검증**:
+   - `.claude/skills/harness-*.md` 파일을 Glob으로 탐색한다.
+   - 변경된 파일의 도메인과 관련된 하네스를 식별한다 (예: `.tsx` 변경 → `harness-fe-*` 하네스).
+   - 관련 하네스가 있으면 읽고, 해당 하네스의 안티패턴(Anti/Good 쌍)을 기준으로 위반 여부를 검증한다.
+   - 하네스의 검증 기준(체크리스트)을 항목별로 통과 여부를 판정한다.
+6. **core-rules 준수 확인**: `.claude/skills/core-rules.md`의 규칙을 준수했는지 확인한다.
 
 ## 보고 형식
 
@@ -44,6 +49,8 @@ permissionMode: plan
 | 참조 일관성 | pass/fail | |
 | 보안 | pass/fail | |
 | 규칙 준수 | pass/fail | |
+| 하네스 안티패턴 | pass/fail/N/A | 관련 하네스명 |
+| 하네스 체크리스트 | pass/fail/N/A | 관련 하네스명 |
 
 ### 발견된 문제
 - [구체적 문제와 위치]

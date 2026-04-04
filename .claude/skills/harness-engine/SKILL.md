@@ -199,15 +199,14 @@ contract packet에는 최소한 다음이 있어야 한다.
 
 ```text
 Agent tool 호출:
+  description: "harness generation for {domain}"
   subagent_type: general-purpose
   isolation: worktree
   run_in_background: false (포그라운드)
-
-또는 커스텀 에이전트 사용 (권장):
-  .claude/agents/harness-researcher/AGENT.md
-  - model: sonnet, effort: high
-  - 도메인 조사와 하네스 생성에 최적화된 도구/권한 설정
+  prompt: (아래 프롬프트 구성 참조)
 ```
+
+커스텀 에이전트 `.claude/agents/harness-researcher/`가 존재하면 Claude Code가 description 매칭으로 자동 위임할 수 있다. 자동 위임이 안 되면 위 general-purpose 설정을 사용한다.
 
 ### 서브에이전트에 전달할 프롬프트 구성
 
@@ -264,13 +263,11 @@ Agent tool 호출:
 
 ```text
 Agent tool 호출:
+  description: "harness validation for {domain}"
   subagent_type: general-purpose
   isolation: 없음 (worktree 미사용 — 읽기만 수행)
   run_in_background: false (포그라운드)
-
-또는 커스텀 에이전트 사용 (권장):
-  .claude/agents/harness-researcher/AGENT.md
-  - 검증 시에도 동일 에이전트 사용 (읽기 전용 작업)
+  prompt: (아래 검증 프롬프트 참조)
 ```
 
 ### 검증 서브에이전트 프롬프트

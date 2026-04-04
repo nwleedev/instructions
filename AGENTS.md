@@ -19,6 +19,12 @@
 - 자동 활성화가 안 되면 `/harness-<domain>` 명령으로 수동 활성화할 수 있다.
 - 사용 가능한 하네스는 `.claude/skills/` 폴더를 확인한다.
 
+## Learning & Utility Skills
+
+범용 스킬은 `.claude/skills/` 폴더에서 description 매칭으로 자동 활성화된다.
+
+- `deep-study` — 도메인 심층 학습 (`/deep-study`로 수동 활성화 가능)
+
 ## Custom Agents
 
 `.claude/agents/` 디렉터리에 정의된 전용 에이전트:
