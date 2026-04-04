@@ -96,6 +96,21 @@ SESSION.md는 스냅샷 요약이 **최신순으로 누적되는 로그**이다.
 - 별도 PLANS.md 파일을 만들지 않는다.
 - 목표, 범위, 완료 기준은 Claude Code Plan 파일에 기록한다.
 
+### Plan Backup (HARD RULE)
+
+플랜 모드 진입 시 기존 플랜이 있으면 **반드시 백업한 뒤** 새 플랜을 작성한다.
+
+절차:
+1. `.claude/plans/` 내 파일 목록을 확인한다.
+2. 활성 플랜 파일이 있으면 세션 notes에 복사한다:
+   `cp .claude/plans/<name>.md .claude/sessions/<session_id>/notes/plans/<name>--<YYYYMMDD-HHMM>.md`
+3. SESSION.md의 Active Decisions에 백업 경로를 기록한다.
+4. 그 다음 플랜 모드에 진입한다.
+
+복원:
+- 새 플랜 작업 완료 후 이전 플랜으로 돌아가야 하면 백업 파일을 읽고 내용을 안내한다.
+- 이전 플랜이 여전히 유효하면 해당 내용으로 새 플랜을 작성한다.
+
 ---
 
 ## Goal Alignment Check
